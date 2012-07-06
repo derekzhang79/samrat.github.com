@@ -18,7 +18,7 @@ SITENAME = 'Samrat Man Singh'
 FEED_RSS = 'feeds/all.xml'
 
 TWITTER_USERNAME = 'samratmansingh'
-GOOGLE_ANALYTICS = 'UA-18986645-6'
+GOOGLE_ANALYTICS = 'UA-18986645-3'
 DISQUS_SITENAME = 'samratmansingh'
 
 SOCIAL = (('twitter', 'http://twitter.com/samratmansingh'),
