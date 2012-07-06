@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="Personal website and blog of Samrat Man Singh. Follow him at @samratmansingh" />
+  <meta name="keywords" content="Samrat Man Singh, python, flask, computers, technology, nepal" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posts tagged 'dropbox' | Samrat Man Singh </title>
+  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <link rel="stylesheet" href=".././theme/css/styles.min.css" type="text/css" media="screen, projection">
+  
+</head>
+
+<body>
+<header class="main-header">
+  <hgroup>
+    <div class="picture">
+      <a href="/" rel="home"></a>
+    </div>
+    <h1>Samrat Man Singh</h1>
+    <h2>18 year-old from Nepal interested in computers and technology.</h2>
+  </hgroup>
+  <nav>
+    <ul class="main-nav">
+      <li><a href="/" id="home-link">Home</a></li>
+      <li><a href="http://twitter.com/#!/samratmansingh" id="twitter-link">Twitter</a></li>
+      <li><a href="http://github.com/samrat" id="github-link">Github</a></li>
+			<li><a href="http://feeds.feedburner.com/SamratManSingh" id="github-link">Feed</a></li>
+      <li><a href="mailto:samratmansingh@gmail.com?subject=Hello" id="contact-link">Contact</a></li>
+    </ul>
+  </nav>
+  <a href="http://pelican.notmyidea.org" class="fork-me">Powered by Pelican.</a>
+
+</header>
+
+<section class="main-section blog-section" id="blog-posts">
+  
+    <h3 class="date">October 21, 2011</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2011/10/videodropper-behind-the-scenes.html" title="Permalink to Videodropper- Behind the scenes">Videodropper- Behind the scenes</a></h2>
+	
+	</hgroup>
+	<p>My <a href="http://samrat.github.com/blog/videodropper.html">previous post</a> about my new web app- <a href="http://videodropper.ep.io">Videodropper</a>, which lets you send Youtube videos to your Dropbox account got quite huge on Hacker News yesterday(At least, much more than I'd anticipated). So, I decided to write another post about Videodropper on how it works.</p>
+<p>Videodropper is powered by <a href="http://python.org">Python</a>, <a href="http://flask.pocoo.org">Flask</a>, <a href="http://redis.io">Redis</a> and <a href="http://celeryproject.org">Celery</a>. It is hosted on <a href="http://ep.io">Epio</a>(as you might have guessed from the ep.io subdomain). All the downloading is handled by <a href="https://github.com/rg3/youtube-dl">youtube-dl</a> and of course, the uploading is done using the Dropbox API. 
+<br/><br/></p>
+<h2>Basics</h2>
+<p>What happens when you press the "Send to Dropbox" button is that Videodropper gets the Youtube video URL(playlists won't work, more on that later), and it queues it up on a Celeryd process; when the download starts, another process also starts that monitors the size of the video file so that it doesn't cross the upload limit. So, that's two processes for one file download. Currently, Videodropper runs only four processes which means that it can process only two videos at a time. Up until now, these modest resources have served quite well, as the download and upload speed is pretty high. However, the Celery instance, which is limited to 128MB of memory runs out of memory when Videodropper starts getting a lot of requests. </p>
+<p>When Celery starts a task which in this case is a "download, then upload", youtube-dl starts downloading the Youtube video which, as I mentioned above happens quite fast. Then, if the size hasn't exceeded Dropbox's upload limit(which is 150MB now, but it should soon be upgraded to 300MB), the upload process begins. That's basically the core functionality of the app. Oh, and if you choose to optimize the video for iPhone, youtube-dl simply downloads the .mp4 file(Youtube format=18) of the video, no transcoding takes place.
+<br/><br/></p>
+<h2>Size monitoring</h2>
+<p>One obvious optimization for Videodropper is the size-monitoring as you've seen that it eats up a whole process. One solution would have been to find out the file size before downloading, but I couldn't find any way to do that(if you happen to know of any please, please tell me about it.)
+<br/><br/></p>
+<h2>Playlist support</h2>
+<p>I've got some requests for Videodropper to start supporting playlists which is quite a reasonable request, given that Playlists is a huge part of Youtube. However, at present supporting playlists is just not an option. As I've mentioned above, Videodropper runs on a very modest server configuration and downloading playlists would surely cause Videodropper to run out of memory. The limits on the server resources are mostly because Videodropper is a free app, so I am not able to invest much money on it, so if you're interested in supporting Videodropper you could <a href="https://flattr.com/thing/414622/Videodropper">donate some money on Flattr</a> to help upgrade Videodropper's server capacity.</p>
+<p>In a nutshell, Flask serves the website, Celery queues up the download tasks(and also a size monitoring task) and Redis is used mostly as a backend to Celery, but also for storing the "Recent Downloads" of the user. That's it. If you have any query or suggestion feel free to shoot them at the comments below. </p>
+	</article>
+
+    <h3 class="date">October 20, 2011</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2011/10/videodropper.html" title="Permalink to Videodropper">Videodropper</a></h2>
+	
+	</hgroup>
+	<p><a href="http://videodropper.ep.io"><img src="http://dl.dropbox.com/u/25029287/2011-10-16-151433_1280x800_scrot.png" style="width:500px; height:300px; float:left; padding:10px;"/></a></p>
+<p>If you're constantly troubled by having to wait for Youtube to buffer videos, or want to keep some videos with you so you can watch them again and again without wasting bandwidth, then I've just recently released a web service that lets you download videos from Youtube. <strong>But there are plenty of websites that already do that, why do I need another one?</strong>. <em>What <a href="http://videodropper.ep.io">Videodropper</a>(yeah, that's what its called) actually does is it sends videos to your Dropbox folder</em>.<br />
+</p>
+<p><br/></p>
+<h2>Why send it to Dropbox?</h2>
+<ul>
+<li>
+<p><strong>Syncing</strong>- Instead of downloading the video to your computer you'll be saving it to your personal cloud which will be accessible to you on any PC or mobile device. So sending a Youtube video to your Dropbox folder is basically the same as downloading into your machine, only more awesome.</p>
+</li>
+<li>
+<p><strong>Bandwidth</strong>- Bandwidth <em>is</em> the primary motivation for why I built Videodropper. I have a rather slow internet connection and I get all sort of problems when watching Youtube videos- having to wait for buffering, videos getting stuck(it always happens to me when I resize the player), and the list goes on. Videodropper solves these problems because <a href="http://www.dropbox.com/help/26"><strong>"Dropbox is smart about using bandwidth."</strong></a> Downloading happens at the fastest possible speed, but without interfering with your Internet usage, so if you have a slow connection you'll be able to download Youtube videos and still use the Internet at optimal speed. Also, once its fully downloaded <strong>you can watch the full video without any pain</strong>. </p>
+</li>
+<li>
+<p><strong>iOS devices</strong>- Dropbox works great on iOS devices and you can optimize videos you send using Videodropper to work on the iPhone or iPod touch. After you've synced the videos, you can also watch them later offline(this makes use of Dropbox's Local Storage on your iPhone/iPod).
+<br/><br/></p>
+</li>
+</ul>
+<h2>How do I use Videodropper?</h2>
+<p>Using Videodropper is really easy. After linking Videodropper with your Dropbox account, you just copy the URL of the video you want to send, paste it into Videodropper and then send it. A bookmarklet is also being worked on in order to further simplify this process. </p>
+<p><strong>Note</strong> that Videodropper is still in Beta, so some of your videos may not get through properly, in case you notice any thing strange kindly send an email to samratmansingh@gmail.com or reach me on Twitter <a href="http://twitter.com/samratmansingh">@samratmansingh</a></p>
+	</article>
+
+</section>
+
+
+
+<div class="mobile-nav">
+  <span class="nav-btn" id="mobile-nav-btn">
+    <span class="nav-btn-bar"></span>
+    <span class="nav-btn-bar"></span>
+    <span class="nav-btn-bar"></span>
+  </span>
+  <h3><a href="/">samrat.github.com</a></h3>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+var twitter_integration_enabled = true,
+    github_integration_enabled = true,
+    dribbble_integration_enabled = false,
+    instagram_integration_enabled = true;
+/*]]>*/
+</script>
+
+<script src=".././theme/js/min/scripts.min.js"></script>
+
+
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-18986645-3");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+
+</body>

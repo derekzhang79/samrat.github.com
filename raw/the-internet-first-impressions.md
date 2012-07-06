@@ -1,0 +1,11 @@
+Title: The Internet- First Impressions
+Date: 2012-03-20 18:15
+
+True, the Internet has changed the way we do business, the way we access information and the way we communicate. It is a revolutionary tool, which has probably already secured a place in the history books of the future. Lately, however, the way we use the Internet has changed too. My earliest memories of the Internet is how I used to throw questions at the butler from AskJeeves.com. For those unfamiliar with it, AskJeeves(which is now Ask.com). was a search engine similar to Google.
+
+That was my introduction to the Internet: it was a butler who would try to satisfy my curiosities. However as I see it, things are changing. If I were to guess, I’d say that most people who start using the Internet these days start from social networking sites like Facebook. Now, I’ve got nothing against Facebook or social networking tools but I just don’t think that a person’s first impression of the Internet should be that it was built to emulate real-world society. Nor should kids be limited to a walled site that gives them a very limited perspective of the Internet. The internet is so much more than that. It’s so much more than what, in my opinion, most people perceive it to be. And I believe that everyone should know and make use of the endless opportunities it creates.
+
+The way people are being introduced to the internet may also be damaging to the whole ethos of the internet itself. For instance, someone with the impression that the purpose for building the Internet was to network socially will probably never make a significant contribution to the knowledge base of the internet. Furthermore, I think that these are the people who go around making stupid comments which don’t add any value to the conversation.
+
+The number of internet users is growing rapidly but do we want these people to stay limited to the walled gardens of Facebook or so many other sites which are pretty fun to hang out but limit its users off what is a gigantuan amount of knowledge? I think that we really need to rethink the way that we are introducing people to the internet. That is absolutely necessary if we are to keep the resourcefulness of the internet sustainable.
+

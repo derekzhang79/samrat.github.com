@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="Personal website and blog of Samrat Man Singh. Follow him at @samratmansingh" />
+  <meta name="keywords" content="Samrat Man Singh, python, flask, computers, technology, nepal" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posts tagged 'vagrant' | Samrat Man Singh </title>
+  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <link rel="stylesheet" href=".././theme/css/styles.min.css" type="text/css" media="screen, projection">
+  
+</head>
+
+<body>
+<header class="main-header">
+  <hgroup>
+    <div class="picture">
+      <a href="/" rel="home"></a>
+    </div>
+    <h1>Samrat Man Singh</h1>
+    <h2>18 year-old from Nepal interested in computers and technology.</h2>
+  </hgroup>
+  <nav>
+    <ul class="main-nav">
+      <li><a href="/" id="home-link">Home</a></li>
+      <li><a href="http://twitter.com/#!/samratmansingh" id="twitter-link">Twitter</a></li>
+      <li><a href="http://github.com/samrat" id="github-link">Github</a></li>
+			<li><a href="http://feeds.feedburner.com/SamratManSingh" id="github-link">Feed</a></li>
+      <li><a href="mailto:samratmansingh@gmail.com?subject=Hello" id="contact-link">Contact</a></li>
+    </ul>
+  </nav>
+  <a href="http://pelican.notmyidea.org" class="fork-me">Powered by Pelican.</a>
+
+</header>
+
+<section class="main-section blog-section" id="blog-posts">
+  
+    <h3 class="date">July 06, 2012</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2012/07/a-first-look-at-provisioning-with-puppeton-a-vagrant-box.html" title="Permalink to A first look at provisioning with Puppet(on a Vagrant box)">A first look at provisioning with Puppet(on a Vagrant box)</a></h2>
+	
+	</hgroup>
+	<p>In my <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box.html">previous post</a>, I talked about deploying a Flask app on a Vagrant box using Gunicorn and Nginx. The response I got was mind-blowing, so I've decided to write about another neat tool that's awesome for deploying web apps- Puppet. <a href="http://vagrantup.com">Vagrant</a> actually encourages its users to use it, and you should use it. <strong>There's also an alternative to Puppet called <a href="http://www.opscode.com/chef/">Chef</a>; some people prefer that over Puppet, so you might want to check it out.</strong></p>
+<p>Hopefully I'll be able to demonstrate what Puppet does and why its awesome in this post. But please note that this isn't meant as a comprehensive tutorial, you should check out Puppet's <a href="http://docs.puppetlabs.com/">docs</a> for that. Also even though the Puppet docs asks you to get the Learning Puppet VM, I found it much more comfortable to use <code>vagrant ssh</code> for learning Puppet, so if you already have Vagraant installed, you might want to try that out too- just try running <code>puppet</code> inside the virtual machine. </p>
+<p>What Puppet does is something called <em>provisioning</em>- that means that it <em><a href="http://www.youtube.com/watch?v=bP8Mtiuc8XM">makes computers do what they are supposed to do</a></em>. In other words, it does the configuring for you. To understand what that means, let's see it in action.</p>
+<p>First create a Vagrant box, </p>
+<div class="codehilite"><pre><span class="n">mkdir</span> <span class="n">codebase_with_puppet</span>
+<span class="n">cd</span> <span class="n">codebase_with_puppet</span>
+
+<span class="n">vagrant</span> <span class="n">init</span>
+</pre></div>
+
+
+<p>You should now see Vagrantfile. Open it with a text editor, then uncomment the lines</p>
+<div class="codehilite"><pre><span class="n">config</span><span class="p">.</span><span class="n">vm</span><span class="p">.</span><span class="n">provision</span> <span class="p">:</span><span class="n">puppet</span> <span class="n">do</span> <span class="o">|</span><span class="n">puppet</span><span class="o">|</span>
+    <span class="n">puppet</span><span class="p">.</span><span class="n">manifests_path</span> <span class="p">=</span> &quot;<span class="n">manifests</span>&quot;
+    <span class="n">puppet</span><span class="p">.</span><span class="n">manifest_file</span>  <span class="p">=</span> &quot;<span class="n">base</span><span class="p">.</span><span class="n">pp</span>&quot;
+<span class="k">end</span>
+</pre></div>
+
+
+<p>Now, create <code>base.pp</code> inside a folder called manifests, and add the following to it.</p>
+<div class="codehilite"><pre><span class="n">package</span> <span class="p">{</span>&quot;<span class="n">nginx</span>&quot;<span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">present</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Now, run <code>vagrant up</code>. You'll notice that Vagrant automatically installs <code>nginx</code> after it boots the VM. You should get a message like </p>
+<div class="codehilite"><pre><span class="n">notice</span><span class="p">:</span> <span class="o">/</span><span class="n">Stage</span><span class="p">[</span><span class="n">main</span><span class="p">]</span><span class="o">//</span><span class="n">Package</span><span class="p">[</span><span class="n">nginx</span><span class="p">]</span><span class="o">/</span><span class="n">ensure</span><span class="p">:</span> <span class="n">ensure</span> <span class="n">changed</span> <span class="s">&#39;purged&#39;</span> <span class="n">to</span> <span class="s">&#39;present&#39;</span>
+</pre></div>
+
+
+<p>This can become a real treasure as this way, you won't have to memorize what you need to install, to get the app running. All the system needs is to have <code>puppet</code> installed, after that <code>puppet</code> with the right manifests will handle everything. </p>
+<p>Now, let's do something different with Puppet- instead of installing another package, we'll use it to configure <code>nginx</code>. </p>
+<p>First, create a file in your local machine, inside <code>codebase_with_puppet</code> called <code>codebase_nginx</code>. To that file add the following</p>
+<div class="codehilite"><pre><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:8000</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>If you've gone through the <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box.html">previous post</a> you'll notice that it's the same configuration that we had used. </p>
+<p>Now, we'll use Puppet to make sure that the configuration file is placed where its supposed to be. To your <code>base.pp</code> file, add </p>
+<div class="codehilite"><pre><span class="n">file</span> <span class="p">{</span>&quot;<span class="n">rm</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="n">default</span>&quot;<span class="p">:</span>
+    <span class="n">path</span> <span class="p">=</span><span class="o">&gt;</span> <span class="s">&#39;/etc/nginx/sites-enabled/default&#39;</span><span class="p">,</span>
+    <span class="n">ensure</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">absent</span><span class="p">,</span>
+    <span class="n">require</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">Package</span><span class="p">[</span><span class="s">&#39;nginx&#39;</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">file</span> <span class="p">{</span>&quot;<span class="n">setup</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="n">codebase</span>&quot;<span class="p">:</span>
+    <span class="n">path</span> <span class="p">=</span><span class="o">&gt;</span> <span class="s">&#39;/etc/nginx/sites-enabled/codebase_nginx&#39;</span><span class="p">,</span>
+    <span class="n">ensure</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">present</span><span class="p">,</span>
+    <span class="n">require</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">Package</span><span class="p">[</span><span class="s">&#39;nginx&#39;</span><span class="p">],</span>
+    <span class="n">source</span> <span class="p">=</span><span class="o">&gt;</span> &quot;<span class="o">/</span><span class="n">vagrant</span><span class="o">/</span><span class="n">codebase_nginx</span>&quot;<span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Run <code>vagrant reload</code> and you're done with the <code>nginx</code> configuration. Besides removing the repetitiveness for you, Puppet is also wonderful when you're working on a team or on an open-source project. Now, all you need to do is write the manifests and once you share them you can rest assured that the entire team has the exact same environment.<br />
+</p>
+	</article>
+
+</section>
+
+
+
+<div class="mobile-nav">
+  <span class="nav-btn" id="mobile-nav-btn">
+    <span class="nav-btn-bar"></span>
+    <span class="nav-btn-bar"></span>
+    <span class="nav-btn-bar"></span>
+  </span>
+  <h3><a href="/">samrat.github.com</a></h3>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+var twitter_integration_enabled = true,
+    github_integration_enabled = true,
+    dribbble_integration_enabled = false,
+    instagram_integration_enabled = true;
+/*]]>*/
+</script>
+
+<script src=".././theme/js/min/scripts.min.js"></script>
+
+
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-18986645-3");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+
+</body>
