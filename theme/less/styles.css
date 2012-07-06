@@ -932,7 +932,7 @@ a.button_accent {
   font-weight: 400;
 }
 a.button_accent:link {
-  color: #0e94ec;
+  color: #333366;
 }
 a.button_accent:hover {
   color: #ffffff;

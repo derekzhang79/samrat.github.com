@@ -1,4 +1,5 @@
 Title: Google's answer to Siri: Now
+Date: 2012-06-28
 Tags: miscellaneous, google, apple
 
 If you've been following the tech world recently you'd know that Apple and Google haven't been the best of friends lately. You know, because Google ripped off Apple the same way Microsoft had ripped them off back when the PC boom was kicking off. There's a statement by Steve Jobs in his biography which can only be regarded as a declaration of war on Google. And we are starting to actually see this war taking place- a few weeks ago, Apple declared that the new iOS will come with its own 'Google Maps'-like service instead of Google Maps.

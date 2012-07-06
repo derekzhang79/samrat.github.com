@@ -1,4 +1,5 @@
 Title: A first look at provisioning with Puppet(on a Vagrant box)
+Date: 2012-06-04
 tags: deployment, puppet, vagrant
 
 In my [previous post][prev_post], I talked about deploying a Flask app on a Vagrant box using Gunicorn and Nginx. The response I got was mind-blowing, so I've decided to write about another neat tool that's awesome for deploying web apps- Puppet. [Vagrant][vagrant] actually encourages its users to use it, and you should use it. **There's also an alternative to Puppet called [Chef][chef]; some people prefer that over Puppet, so you might want to check it out.**
