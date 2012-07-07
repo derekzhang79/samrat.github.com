@@ -2,6 +2,8 @@ Title: Help me buy a domain name
 tags: miscellaneous, kickstarter, domain-name
 Date: 2012-07-07
 
+**UPDATE- [Udo][udo] on Hacker News was kind enough to buy me a domain. This site can now be reached at [http://samrat.me][my_domain]. Thanks a lot, Udo.**
+
 I've got a problem. I want to buy a domain name for this website. But due to some banking regulations in my country, online payments cannot be made(for international transactions, at least.) Some companies *are* making money by buying products on Amazon and other online shops on behalf of people here, but they're limited to only physical goods. 
 
 This problem has been troubling me for a while, and I've come up with what could be a solution. Following all the recent buzz around Kickstarter- I decided to ask the Internet for help, but don't worry, **I'm not asking for your money**. 
@@ -13,3 +15,5 @@ If you're interested in helping but not looking to register a domain name right 
 Thank you :)
 
 [aff]: http://www.namecheap.com?aff=34707
+[udo]: http://news.ycombinator.com/user?id=Udo
+[my_domain]: http://samrat.me
