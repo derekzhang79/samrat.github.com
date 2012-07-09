@@ -1,4 +1,4 @@
-#from syte_settings import *
+from syte_settings import *
 
 ARTICLE_PERMALINK_STRUCTURE = 'blog/%Y/%m/'
 
