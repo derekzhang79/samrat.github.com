@@ -51,17 +51,17 @@ def compress_js():
       'components/links.js',
     ]
 
-    if settings.TWITTER_INTEGRATION_ENABLED:
-        js_files.append('components/twitter.js')
+    #if settings.TWITTER_INTEGRATION_ENABLED:
+        #js_files.append('components/twitter.js')
 
-    if settings.GITHUB_INTEGRATION_ENABLED:
-        js_files.append('components/github.js')
+    #if settings.GITHUB_INTEGRATION_ENABLED:
+        #js_files.append('components/github.js')
 
-    if settings.INSTAGRAM_INTEGRATION_ENABLED:
-        js_files.append('components/instagram.js')
+    #if settings.INSTAGRAM_INTEGRATION_ENABLED:
+        #js_files.append('components/instagram.js')
 
-    if settings.DISQUS_INTEGRATION_ENABLED:
-        js_files.append('components/disqus.js')
+    #if settings.DISQUS_INTEGRATION_ENABLED:
+        #js_files.append('components/disqus.js')
 
     combined = ''
     for js in js_files:
