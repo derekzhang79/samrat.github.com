@@ -1,4 +1,4 @@
-ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{slug}/index.html'
+ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{slug}'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{slug}/index.html'
 
 AUTHOR = 'Samrat Man Singh'
