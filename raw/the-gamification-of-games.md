@@ -1,5 +1,6 @@
 Title: The Gamification of Games
 Date: 2011-10-13 18:15
+tags: miscellaneous
 
 On the front page of Hacker News I saw an item today: [*Who killed videogames? How games are getting more addictive but not fun*][1]. And frankly, I haven’t even read the “ghost story” yet. Still, I think I get from the elaborated title what the article is going to say. I’d also recently read [The Gamification][2] on Coding Horror (which is actually not quite related to the context) and I couldn’t help make an association here between, and this is going to sound weird, games and gamification.
 

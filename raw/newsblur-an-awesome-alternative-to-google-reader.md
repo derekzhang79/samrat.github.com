@@ -1,6 +1,6 @@
 Title: Newsblur, an awesome alternative to Google Reader
 Date: 2011-08-07 18:15
-Tags: webapps, reviews
+tags: webapps, reviews
 
 I've recently [discovered][1] a new web app called [Newsblur][newsblur]. Basically, Newsblur is a feed reader and aims to solve many problems Google Reader doesn't. Newsblur gives you the option of viewing the original website page along with the feed, so you can browse through the feed to see if anything interests you and then, see the actual webpage inside Newsblur itself. 
 

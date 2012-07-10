@@ -1,6 +1,5 @@
-from syte_settings import *
-
-ARTICLE_PERMALINK_STRUCTURE = 'blog/%Y/%m/'
+ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{slug}/index.html'
+ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{slug}/index.html'
 
 AUTHOR = 'Samrat Man Singh'
 
@@ -14,7 +13,7 @@ DISPLAY_PAGES_ON_MENU = True
 DEFAULT_DATE_FORMAT = '%B %d, %Y'
 
 SITENAME = 'Samrat Man Singh'
-
+FEED_DOMAIN = 'http://samrat.me'
 FEED_RSS = 'feeds/all.xml'
 
 TWITTER_USERNAME = 'samratmansingh'
@@ -26,7 +25,7 @@ SOCIAL = (('twitter', 'http://twitter.com/samratmansingh'),
 
 TIMEZONE = "Asia/Kathmandu"
 
-THEME = './syte-pelican'
+THEME = '/home/samrat/code/syte-pelican'
 MEDIA_URL = 'theme/'
 TWITTER_INTEGRATION_ENABLED = True
 GITHUB_INTEGRATION_ENABLED = True
