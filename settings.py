@@ -20,8 +20,8 @@ TWITTER_USERNAME = 'samratmansingh'
 GOOGLE_ANALYTICS = 'UA-18986645-3'
 DISQUS_SITENAME = 'samratmansingh'
 
-SOCIAL = (('twitter', 'http://twitter.com/samratmansingh'),
-          ('github', 'http://github.com/samrat'),)
+SOCIAL = (('Twitter', 'http://twitter.com/samratmansingh'),
+          ('Github', 'http://github.com/samrat'),)
 
 TIMEZONE = "Asia/Kathmandu"
 
