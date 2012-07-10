@@ -1,5 +1,9 @@
+from pelican.plugins import related_posts
+
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{slug}'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{slug}/index.html'
+
+PLUGINS = [related_posts]
 
 AUTHOR = 'Samrat Man Singh'
 
