@@ -111,6 +111,28 @@
 
 	<br/>
 
+	
+	<div id="comments">
+	<a id="comments-link" href="javascript:showComments()">Show comments</a>
+	<div id="disqus_thread"></div>
+	<script>
+	var disqus_shortname = 'samratmansingh'
+	, disqus_identifier = 'blog/2011/10/videodropper'
+	, disqus_developer = 0;
+
+	showComments = function() {
+			var link = document.getElementById('comments-link');
+			link.parentNode.removeChild(link);
+			(function(d) {
+			 var dsq = d.createElement('script'); dsq.async = true;
+			 dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+			 (d.head || d.body).appendChild(dsq);
+			 })(document);
+	}
+	</script>
+	</div>
+	
+
 	 <a href="../../../../." class="button_accent">&larr;&nbsp;&nbsp;&nbsp;back to blog</a>
 
 	</footer>
