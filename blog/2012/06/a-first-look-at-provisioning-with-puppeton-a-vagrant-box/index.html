@@ -57,6 +57,7 @@
        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(hn, s);
     })();
 </script>
+	
 	</hgroup>
 	<p>In my <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box.html">previous post</a>, I talked about deploying a Flask app on a Vagrant box using Gunicorn and Nginx. The response I got was mind-blowing, so I've decided to write about another neat tool that's awesome for deploying web apps- Puppet. <a href="http://vagrantup.com">Vagrant</a> actually encourages its users to use it, and you should use it. <strong>There's also an alternative to Puppet called <a href="http://www.opscode.com/chef/">Chef</a>; some people prefer that over Puppet, so you might want to check it out.</strong></p>
 <p>Hopefully I'll be able to demonstrate what Puppet does and why its awesome in this post. But please note that this isn't meant as a comprehensive tutorial, you should check out Puppet's <a href="http://docs.puppetlabs.com/">docs</a> for that. Also even though the Puppet docs asks you to get the Learning Puppet VM, I found it much more comfortable to use <code>vagrant ssh</code> for learning Puppet, so if you already have Vagraant installed, you might want to try that out too- just try running <code>puppet</code> inside the virtual machine. </p>
@@ -129,9 +130,9 @@
 	
 		<h2>Related posts:</h2>
 		
-			<a href="/blog/2011/10/videodropper">Videodropper</a><br/>
-		
 			<a href="/blog/2011/10/a-world-without-lego">A world without LEGO</a><br/>
+		
+			<a href="/blog/2011/10/videodropper">Videodropper</a><br/>
 		
 			<a href="/blog/2012/05/would-you-want-to-be-on-svbtle">Would you want to be on Svbtle?</a><br/>
 		
@@ -154,29 +155,7 @@
 
 	<br/>
 
-	
-	<div id="comments">
-	<a id="comments-link" href="javascript:showComments()">Show comments</a>
-	<div id="disqus_thread"></div>
-	<script>
-	var disqus_shortname = 'samratmansingh'
-	, disqus_identifier = 'blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box'
-	, disqus_developer = 0;
-
-	showComments = function() {
-			var link = document.getElementById('comments-link');
-			link.parentNode.removeChild(link);
-			(function(d) {
-			 var dsq = d.createElement('script'); dsq.async = true;
-			 dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-			 (d.head || d.body).appendChild(dsq);
-			 })(document);
-	}
-	</script>
-	</div>
-	
-
-	 <a href="../../../../." class="button_accent">&larr;&nbsp;&nbsp;&nbsp;back to blog</a>
+	<a href="../../../../." class="button_accent">&larr;&nbsp;&nbsp;&nbsp;back to blog</a>
 
 	</footer>
 	</article>

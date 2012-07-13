@@ -57,6 +57,7 @@
        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(hn, s);
     })();
 </script>
+	
 	</hgroup>
 	<p>My <a href="http://samrat.github.com/blog/videodropper.html">previous post</a> about my new web app- <a href="http://videodropper.ep.io">Videodropper</a>, which lets you send Youtube videos to your Dropbox account got quite huge on Hacker News yesterday(At least, much more than I'd anticipated). So, I decided to write another post about Videodropper on how it works.</p>
 <p>Videodropper is powered by <a href="http://python.org">Python</a>, <a href="http://flask.pocoo.org">Flask</a>, <a href="http://redis.io">Redis</a> and <a href="http://celeryproject.org">Celery</a>. It is hosted on <a href="http://ep.io">Epio</a>(as you might have guessed from the ep.io subdomain). All the downloading is handled by <a href="https://github.com/rg3/youtube-dl">youtube-dl</a> and of course, the uploading is done using the Dropbox API. 
@@ -99,29 +100,7 @@
 
 	<br/>
 
-	
-	<div id="comments">
-	<a id="comments-link" href="javascript:showComments()">Show comments</a>
-	<div id="disqus_thread"></div>
-	<script>
-	var disqus_shortname = 'samratmansingh'
-	, disqus_identifier = 'blog/2011/10/videodropper-behind-the-scenes'
-	, disqus_developer = 0;
-
-	showComments = function() {
-			var link = document.getElementById('comments-link');
-			link.parentNode.removeChild(link);
-			(function(d) {
-			 var dsq = d.createElement('script'); dsq.async = true;
-			 dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-			 (d.head || d.body).appendChild(dsq);
-			 })(document);
-	}
-	</script>
-	</div>
-	
-
-	 <a href="../../../../." class="button_accent">&larr;&nbsp;&nbsp;&nbsp;back to blog</a>
+	<a href="../../../../." class="button_accent">&larr;&nbsp;&nbsp;&nbsp;back to blog</a>
 
 	</footer>
 	</article>
