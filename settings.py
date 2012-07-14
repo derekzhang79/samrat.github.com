@@ -1,11 +1,14 @@
 from pelican.plugins import related_posts
 
+SITEURL = 'http://samrat.github.com'
+
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{slug}'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{slug}/index.html'
 
 PLUGINS = [related_posts]
 
 AUTHOR = 'Samrat Man Singh'
+RELATIVE_URLS = False
 
 #DEFAULT_CATEGORY = ''
 OUTPUT_PATH = './'
@@ -17,8 +20,9 @@ DISPLAY_PAGES_ON_MENU = True
 DEFAULT_DATE_FORMAT = '%B %d, %Y'
 
 SITENAME = 'Samrat Man Singh'
-FEED_DOMAIN = 'http://samrat.me'
+FEED_DOMAIN = SITEURL
 FEED_RSS = 'feeds/all.xml'
+
 
 TWITTER_USERNAME = 'samratmansingh'
 GOOGLE_ANALYTICS = 'UA-18986645-3'

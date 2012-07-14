@@ -6,7 +6,7 @@
   <meta name="description" content="Personal website and blog of Samrat Man Singh. Follow him at @samratmansingh" />
   <meta name="keywords" content="Samrat Man Singh, python, flask, computers, technology, nepal" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Videodropper- Behind the scenes | Samrat Man Singh</title>
+  <title>Samrat Man Singh - Articles by Samrat Man Singh</title>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <link rel="stylesheet" href="http://samrat.github.com/theme/css/styles.min.css" type="text/css" media="screen, projection">
@@ -40,23 +40,39 @@
 </header>
 
 <section class="main-section blog-section" id="blog-posts">
-	<h3 class="date">October 21, 2011</h3>
-  <article>
+  
+  <h3 class="date">October 20, 2011</h3>
+    <article>
 	<hgroup>
+	<h2><a href="http://samrat.github.com/blog/2011/10/videodropper" title="Permalink to Videodropper">Videodropper</a></h2>
 	
-	<h2><a href="http://samrat.github.com/blog/2011/10/videodropper-behind-the-scenes" title="Permalink to Videodropper- Behind the scenes">Videodropper- Behind the scenes</a></h2>
-	
-<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="samratmansingh">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+	</hgroup>
+	<p><a href="http://videodropper.ep.io"><img src="http://dl.dropbox.com/u/25029287/2011-10-16-151433_1280x800_scrot.png" style="width:500px; height:300px; float:left; padding:10px;"/></a></p>
+<p>If you're constantly troubled by having to wait for Youtube to buffer videos, or want to keep some videos with you so you can watch them again and again without wasting bandwidth, then I've just recently released a web service that lets you download videos from Youtube. <strong>But there are plenty of websites that already do that, why do I need another one?</strong>. <em>What <a href="http://videodropper.ep.io">Videodropper</a>(yeah, that's what its called) actually does is it sends videos to your Dropbox folder</em>.<br />
+</p>
+<p><br/></p>
+<h2>Why send it to Dropbox?</h2>
+<ul>
+<li>
+<p><strong>Syncing</strong>- Instead of downloading the video to your computer you'll be saving it to your personal cloud which will be accessible to you on any PC or mobile device. So sending a Youtube video to your Dropbox folder is basically the same as downloading into your machine, only more awesome.</p>
+</li>
+<li>
+<p><strong>Bandwidth</strong>- Bandwidth <em>is</em> the primary motivation for why I built Videodropper. I have a rather slow internet connection and I get all sort of problems when watching Youtube videos- having to wait for buffering, videos getting stuck(it always happens to me when I resize the player), and the list goes on. Videodropper solves these problems because <a href="http://www.dropbox.com/help/26"><strong>"Dropbox is smart about using bandwidth."</strong></a> Downloading happens at the fastest possible speed, but without interfering with your Internet usage, so if you have a slow connection you'll be able to download Youtube videos and still use the Internet at optimal speed. Also, once its fully downloaded <strong>you can watch the full video without any pain</strong>. </p>
+</li>
+<li>
+<p><strong>iOS devices</strong>- Dropbox works great on iOS devices and you can optimize videos you send using Videodropper to work on the iPhone or iPod touch. After you've synced the videos, you can also watch them later offline(this makes use of Dropbox's Local Storage on your iPhone/iPod).
+<br/><br/></p>
+</li>
+</ul>
+<h2>How do I use Videodropper?</h2>
+<p>Using Videodropper is really easy. After linking Videodropper with your Dropbox account, you just copy the URL of the video you want to send, paste it into Videodropper and then send it. A bookmarklet is also being worked on in order to further simplify this process. </p>
+<p><strong>Note</strong> that Videodropper is still in Beta, so some of your videos may not get through properly, in case you notice any thing strange kindly send an email to samratmansingh@gmail.com or reach me on Twitter <a href="http://twitter.com/samratmansingh">@samratmansingh</a></p>
+	</article>
 
-	<a href="http://news.ycombinator.com/submit" class="hn-share-button">Vote on HN</a>
-			<!--<script type="text/javascript" src="http://hnapiwrapper.herokuapp.com/static/js/button.js"></script>-->
-	<script>
-    (function() {
-       var hn = document.createElement('script'); hn.type = 'text/javascript';
-       hn.async = true; hn.src = 'http://hnbutton.appspot.com/static/hn.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(hn, s);
-    })();
-</script>
+  <h3 class="date">October 21, 2011</h3>
+    <article>
+	<hgroup>
+	<h2><a href="http://samrat.github.com/blog/2011/10/videodropper-behind-the-scenes" title="Permalink to Videodropper- Behind the scenes">Videodropper- Behind the scenes</a></h2>
 	
 	</hgroup>
 	<p>My <a href="http://samrat.github.com/blog/videodropper.html">previous post</a> about my new web app- <a href="http://videodropper.ep.io">Videodropper</a>, which lets you send Youtube videos to your Dropbox account got quite huge on Hacker News yesterday(At least, much more than I'd anticipated). So, I decided to write another post about Videodropper on how it works.</p>
@@ -72,41 +88,33 @@
 <h2>Playlist support</h2>
 <p>I've got some requests for Videodropper to start supporting playlists which is quite a reasonable request, given that Playlists is a huge part of Youtube. However, at present supporting playlists is just not an option. As I've mentioned above, Videodropper runs on a very modest server configuration and downloading playlists would surely cause Videodropper to run out of memory. The limits on the server resources are mostly because Videodropper is a free app, so I am not able to invest much money on it, so if you're interested in supporting Videodropper you could <a href="https://flattr.com/thing/414622/Videodropper">donate some money on Flattr</a> to help upgrade Videodropper's server capacity.</p>
 <p>In a nutshell, Flask serves the website, Celery queues up the download tasks(and also a size monitoring task) and Redis is used mostly as a backend to Celery, but also for storing the "Recent Downloads" of the user. That's it. If you have any query or suggestion feel free to shoot them at the comments below. </p>
-
-	<p>
-	If you liked this post, you should <a href="http://twitter.com/samratmansingh">follow me on Twitter.</a>
-	</p>
-	<br/>	
-	<footer>
-
-	
-
-	<br/>
-
-	
-	<h4>TAGS</h4>
-	<ul class="tags">
-	
-	<li><a href="http://samrat.github.com/tag/dropbox.html" class="tag">dropbox</a></li>
-	
-	<li><a href="http://samrat.github.com/tag/youtube.html" class="tag">youtube</a></li>
-	
-	<li><a href="http://samrat.github.com/tag/webapps.html" class="tag">webapps</a></li>
-	
-	<li><a href="http://samrat.github.com/tag/projects.html" class="tag">projects</a></li>
-	
-	</ul>
-	
-
-	<br/>
-
-	<a href="http://samrat.github.com" class="button_accent">&larr;&nbsp;&nbsp;&nbsp;back to blog</a>
-
-	</footer>
 	</article>
+
+  <h3 class="date">May 03, 2012</h3>
+    <article>
+	<hgroup>
+	<h2><a href="http://samrat.github.com/blog/2012/05/would-you-want-to-be-on-svbtle" title="Permalink to Would you want to be on Svbtle?">Would you want to be on Svbtle?</a></h2>
+	
+	</hgroup>
+	<p>When I first saw the Hacker News <a href="http://news.ycombinator.com/item?id=3742314">post</a> about <a href="http://svbtle.com/">Svbtle</a>, I opened it. Svbtle looked interesting, maybe something I'd want to use but then came the part about it being only for a small number of "vetted bloggers" and like so many others I was dissapointed. The design looked so good, it was a shame I couldn't use it. </p>
+<p>Soon, <em>the debate</em> had already started. As I said, I wasn't the only one dissapointed that it was a closed system- everyone seemed to be complaining, but <a href="http://news.ycombinator.com/item?id=3744237">someone else</a> had gone a step ahead and built something similar called <a href="http://natewienert.com/codename-obtvse">Obtvse</a> and released its code. Svbtle became the <strong>hot story</strong> on Hacker News; even TechCrunch ran a <a href="http://techcrunch.com/2012/03/24/forget-todays-drama-dustin-curtis-svbtle-is-trying-to-push-blogging-forward/">piece on it</a>. </p>
+<p>So, how has things changed since I first read Dustin Curtis' post about Suvbtle? Well, now I don't really want to be on it. It's just gotten too much publicity and now the guys who are already in, the <em>vetted bloggers</em> who were <em>witty and intelligent</em> enough to get invited, kind of look like the bad guys. Regardless of how awesome the design is(yeah, I still the think the design is really neat), right now I think having the Svbtle brand name on my site is not something I'd want.</p>
+<p>What do you guys think? Would you want to be on Svbtle?</p>
+	</article>
+
+
+
+<p class="paginator">
+	
+		
+			<a href="http://samrat.github.com/author/Samrat Man Singh3.html" class="button_accent">&larr;&nbsp;&nbsp;&nbsp;newer</a>
+		
+	
+	
+</p>
+
+
 </section>
-
-
 
 <div class="mobile-nav">
   <span class="nav-btn" id="mobile-nav-btn">
