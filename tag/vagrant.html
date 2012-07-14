@@ -47,7 +47,7 @@
 	<h2><a href="blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box" title="Permalink to A first look at provisioning with Puppet(on a Vagrant box)">A first look at provisioning with Puppet(on a Vagrant box)</a></h2>
 	
 	</hgroup>
-	<p>In my <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box.html">previous post</a>, I talked about deploying a Flask app on a Vagrant box using Gunicorn and Nginx. The response I got was mind-blowing, so I've decided to write about another neat tool that's awesome for deploying web apps- Puppet. <a href="http://vagrantup.com">Vagrant</a> actually encourages its users to use it, and you should use it. <strong>There's also an alternative to Puppet called <a href="http://www.opscode.com/chef/">Chef</a>; some people prefer that over Puppet, so you might want to check it out.</strong></p>
+	<p>In my <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/">previous post</a>, I talked about deploying a Flask app on a Vagrant box using Gunicorn and Nginx. The response I got was mind-blowing, so I've decided to write about another neat tool that's awesome for deploying web apps- Puppet. <a href="http://vagrantup.com">Vagrant</a> actually encourages its users to use it, and you should use it. <strong>There's also an alternative to Puppet called <a href="http://www.opscode.com/chef/">Chef</a>; some people prefer that over Puppet, so you might want to check it out.</strong></p>
 <p>Hopefully I'll be able to demonstrate what Puppet does and why its awesome in this post. But please note that this isn't meant as a comprehensive tutorial, you should check out Puppet's <a href="http://docs.puppetlabs.com/">docs</a> for that. Also even though the Puppet docs asks you to get the Learning Puppet VM, I found it much more comfortable to use <code>vagrant ssh</code> for learning Puppet, so if you already have Vagraant installed, you might want to try that out too- just try running <code>puppet</code> inside the virtual machine. </p>
 <p>What Puppet does is something called <em>provisioning</em>- that means that it <em><a href="http://www.youtube.com/watch?v=bP8Mtiuc8XM">makes computers do what they are supposed to do</a></em>. In other words, it does the configuring for you. To understand what that means, let's see it in action.</p>
 <p>First create a Vagrant box, </p>
@@ -89,7 +89,7 @@
 </pre></div>
 
 
-<p>If you've gone through the <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box.html">previous post</a> you'll notice that it's the same configuration that we had used. </p>
+<p>If you've gone through the <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/">previous post</a> you'll notice that it's the same configuration that we had used. </p>
 <p>Now, we'll use Puppet to make sure that the configuration file is placed where its supposed to be. To your <code>base.pp</code> file, add </p>
 <div class="codehilite"><pre><span class="n">file</span> <span class="p">{</span>&quot;<span class="n">rm</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="n">default</span>&quot;<span class="p">:</span>
     <span class="n">path</span> <span class="p">=</span><span class="o">&gt;</span> <span class="s">&#39;/etc/nginx/sites-enabled/default&#39;</span><span class="p">,</span>

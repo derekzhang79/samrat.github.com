@@ -71,7 +71,7 @@ Run `vagrant reload` and you're done with the `nginx` configuration. Besides rem
 
 	
 
-[prev_post]: http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box.html
+[prev_post]: http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/
 [vagrant]: http://vagrantup.com
 [puppet]: http://docs.puppetlabs.com/
 [chef]: http://www.opscode.com/chef/
