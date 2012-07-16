@@ -1,6 +1,6 @@
 from pelican.plugins import related_posts
 
-SITEURL = 'http://samrat.github.com'
+SITEURL = 'http://samrat.me'
 
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{slug}'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{slug}/index.html'
