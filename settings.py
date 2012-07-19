@@ -4,6 +4,8 @@ SITEURL = 'http://samrat.me'
 
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{slug}'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{slug}/index.html'
+PAGE_URL = '{slug}'
+PAGE_SAVE_AS = '{slug}/index.html'
 
 PLUGINS = [related_posts]
 
