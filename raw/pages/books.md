@@ -1,6 +1,7 @@
 Title: Books I've Read
 slug: books
 
+- **The Girl Who Played with Fire** by Stieg Larsson
 - **The Girl With the Dragon Tattoo** by Stieg Larsson
 - **Hackers and Painters: Big Ideas from the Computer Age** by Paul Graham
 - **The Fellowship of the Ring** by J.R.R. Tolkien
