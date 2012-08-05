@@ -41,6 +41,15 @@
 
 <section class="main-section blog-section" id="blog-posts">
   
+  <h3 class="date">September 14, 2011</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2011/09/instamator-is-now-open-source" title="Permalink to Instamator is now open source">Instamator is now open source</a></h2>
+	
+	</hgroup>
+	<p><a href="http://instamator.ep.io">Instamator</a>, which I <a href="http://samrat.github.com/blog/instamator.html">released just a few days ago</a> is now open source. You can find the source code on <a href="http://github.com/samrat/instamator">Github</a>. Instamator is powered by <a href="http://flask.pocoo.org">Flask</a> and makes use of <a href="http://redis.io">Redis</a>. </p>
+	</article>
+
   <h3 class="date">August 07, 2011</h3>
     <article>
 	<hgroup>
@@ -91,19 +100,6 @@
 <p>So, we probably won't see much direct contribution from hackers in this field. That is a really sad thing, given that they played such a huge role in the digital revolution. But who knows, maybe something will come along that will change this, somehting like the <a href="http://en.wikipedia.org/wiki/Altair_8800">Altair 8800</a> for the PC revolution. </p>
 	</article>
 
-  <h3 class="date">September 02, 2011</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2011/09/theres-already-a-website-for-that" title="Permalink to There's already a website for that">There's already a website for that</a></h2>
-	
-	</hgroup>
-	<p>After reading <a href="http://blog.zachwaugh.com/post/9666969587/how-i-name-my-apps">this article</a> on naming apps, I came up with what I thought was a marvelous idea. I had been looking around for ideas to work on and this was just perfect- a web application that suggests names for apps based on keywords. Since my thoughts and ideas on the application was based only on the above-mentioned article, I merely assumed that nobody else had already created such a website. </p>
-<p>After some moments of dreamy satisfaction at my new idea, I started to plan how to actually build it. My first thought of course was to use an existing library or an API that would find words related to the keywords provided by the user. I knew there were APIs for a thesaurus, so I Googled it and found two that seemed to be popular- <a href="http://words.bighugelabs.com/api.php">Big Huge Thesaurus</a> and <a href="http://developer.wordnik.com/">Wordnik</a>. I opened both the sites, Wordnik's developer site seemed somewhat more attractive so, I checked that one out first. I could see from that page that quite popular sites and softwares like Facebook, Google Chrome, Firefox, Android had used the Wordnik API too, so I was pretty impressed. </p>
-<p>I wanted to see example usage of the API, just to get a better picture of how I'd write the app soI clicked on the 'Showcase' hoping I'd find what I was looking for. The 'Showcase' page, as it turns out would dissapoint me, not only because it didn't have what I was looking for but because I found out the moment the page loaded that I wasn't the first to conceive the idea I had. The app, called <a href="http://panabee.com/">Panabee</a> was listed at the very top. </p>
-<p>Naturally, I was very dissapointed by the revelation. I checked out the site and I have to say, I found myself impressed(...by an app that,some moments ago, I was hoping to build). So that was it,I was right where I started- again on the lookout for a new web app idea(this time hopeful that it hasn't already been built).  <br />
-</p>
-	</article>
-
 
 
 <p class="paginator">
@@ -142,13 +138,14 @@ var twitter_integration_enabled = true,
 
 
     <script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-18986645-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
     </script>
-    <script type="text/javascript">
-    try {
-        var pageTracker = _gat._getTracker("UA-18986645-3");
-    pageTracker._trackPageview();
-    } catch(err) {}</script>
 
 </body>

@@ -41,6 +41,152 @@
 
 <section class="main-section blog-section" id="blog-posts">
   
+  <h3 class="date">May 27, 2012</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2012/05/flask-nginx-gunicornon-a-vagrant-box" title="Permalink to Flask + Nginx + Gunicorn(on a Vagrant box)">Flask + Nginx + Gunicorn(on a Vagrant box)</a></h2>
+	
+	</hgroup>
+	<p><strong>Update-</strong> <em>Since I(and many others on Hacker News) felt that I missed up on an important tool closely related to, and tightly embraced by Vagrant, I've written a follow-up to this post which covers Puppet- you can <a href="http://samrat.github.com/blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box.html">find it here</a>.</em></p>
+<p>I had some difficulty in grasping how exactly to set up a server when I tried to do so recently, so I decided to write a tutorial that will guide you through the process. Hopefully, this post will help you avoid at least some of the confusion that I encountered.</p>
+<p>We'll be using Nginx + Gunicorn to host a simple Flask app. Many of you may not have access to a server but don't worry, we'll use <a href="http://vagrantup.com">Vagrant</a>, which makes use of a VirtualBox VM to emulate a server. </p>
+<h2>The Flask App</h2>
+<p>Because this is a post about deployment more than development, we'll make the web app super-simple. If you're not familiar with Flask, please <a href="http://flask.pocoo.org/">check it out</a>, its awesome and really easy to learn. You'll also probably want to develop the app inside <a href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>- it makes things a lot neater. Make a folder in your local machine(we're not working with the virtual-machine yet) for your app, I'll call it <code>codebase</code>. Create two folders called <code>static</code> and <code>templates</code>, and a Python file called <code>app.py</code>. <code>codebase</code> should now look like this:</p>
+<div class="codehilite"><pre><span class="p">.</span>
+├── <span class="n">app</span><span class="p">.</span><span class="n">py</span>
+├── <span class="n">static</span>
+└── <span class="n">templates</span>
+</pre></div>
+
+
+<p>Now, open app.py with a text editor and add the following:</p>
+<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s">&quot;Hello world!&quot;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+
+<p>At this point, if you run <code>app.py</code> with <code>python app.py</code>, you should be able to open http://localhost:5000/ and see a "Hello World!" printed. Now, freeze your requirements with </p>
+<div class="codehilite"><pre><span class="n">pip</span> <span class="n">freeze</span> <span class="o">&gt;</span> <span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
+</pre></div>
+
+
+<p>Great, now we'll start working on the actual server. </p>
+<h2>Vagrant</h2>
+<p>As I said before, Vagrant allows you to work with server-like environments on your local machine. It's absolutely great. To get <a href="http://vagrantup.com">Vagrant</a> up and running:</p>
+<div class="codehilite"><pre><span class="c"># first install Virtualbox, then,</span>
+<span class="n">gem</span> <span class="n">install</span> <span class="n">vagrant</span>
+<span class="n">vagrant</span> <span class="nb">box</span> <span class="n">add</span> <span class="n">base</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">files</span><span class="p">.</span><span class="n">vagrantup</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">precise32</span><span class="p">.</span><span class="nb">box</span>
+<span class="n">vagrant</span> <span class="n">init</span>
+<span class="n">vagrant</span> <span class="n">up</span>
+</pre></div>
+
+
+<p>If nothing went wrong, you should now see a file called <code>Vagrantfile</code> inside <code>codebase</code>- that's Vagrant's configuration file. Open the file, we'll need to make a few changes to the file.</p>
+<p>First, uncomment the line:</p>
+<div class="codehilite"><pre><span class="n">config</span><span class="p">.</span><span class="n">vm</span><span class="p">.</span><span class="n">network</span> <span class="p">:</span><span class="n">hostonly</span><span class="p">,</span> &quot;192<span class="p">.</span>168<span class="p">.</span>33<span class="p">.</span>10&quot;
+</pre></div>
+
+
+<p>and change "192.168.33.10" to "33.33.33.33". This will enable the host-machine(that is your computer) to access the webserver running on the VM.</p>
+<p>That way we should be able to access a web app running in the VM's <code>localhost</code>, on our machine. </p>
+<p>Because, we did a <code>vagrant up</code> the Vagrant box should already be running. Now, run </p>
+<div class="codehilite"><pre><span class="n">vagrant</span> <span class="n">reload</span>
+</pre></div>
+
+
+<p>so that the changes we made to the Vagrantfile take place.</p>
+<p>After the VM restarts, run</p>
+<div class="codehilite"><pre><span class="n">vagrant</span> <span class="n">ssh</span>
+</pre></div>
+
+
+<p>This allows you to run commands into the VM. Once inside the VM, we'll need to get some things installed. Run </p>
+<div class="codehilite"><pre><span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">nginx</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">virtualenv</span>
+</pre></div>
+
+
+<p>Now let's create a folder inside the VM where we'll keep the application</p>
+<div class="codehilite"><pre><span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">vagrant</span>
+<span class="n">mkdir</span> <span class="n">www</span>
+<span class="n">cd</span> <span class="n">www</span>
+<span class="n">virtualenv</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span> <span class="p">.</span>
+<span class="n">mkdir</span> <span class="n">codebase</span>
+</pre></div>
+
+
+<p>And let's grab the application from our local machine</p>
+<div class="codehilite"><pre><span class="n">cp</span> <span class="o">/</span><span class="n">vagrant</span><span class="o">/*</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">vagrant</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">codebase</span><span class="o">/</span>
+</pre></div>
+
+
+<p><em>Note that while I used <code>cp</code>, its always a better idea to use <code>git</code> or some other version-control system. For more on that, I recommend that you read <a href="http://thomas.pelletier.im/2011/04/git-django-deployment/">this post</a>.</em></p>
+<p>Then, activate the virtualenv we created.</p>
+<div class="codehilite"><pre><span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">vagrant</span><span class="o">/</span><span class="n">www</span>
+<span class="n">source</span> <span class="n">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+
+
+<p>Install gunicorn with <code>pip</code></p>
+<div class="codehilite"><pre><span class="n">pip</span> <span class="n">install</span> <span class="n">gunicorn</span>
+</pre></div>
+
+
+<p>Also install the other Python dependencies your app has with</p>
+<div class="codehilite"><pre><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
+</pre></div>
+
+
+<p>That will grab and install your app's required dependencies like Flask. </p>
+<p>Now, if you run </p>
+<div class="codehilite"><pre><span class="n">gunicorn</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">vagrant</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">codebase</span><span class="o">/</span><span class="n">app</span><span class="p">.</span><span class="n">py</span><span class="p">:</span><span class="n">app</span> <span class="o">-</span><span class="n">b</span> 127<span class="p">.</span>0<span class="p">.</span>0<span class="p">.</span>1<span class="p">:</span>8000
+</pre></div>
+
+
+<p>you'll have your app running but if you try opening it from your browser you'll find that you can't actually see the "Hello World" message that we were expecting. That's where nginx comes in.</p>
+<h2>Nginx</h2>
+<p>First of all, you need to start nginx with</p>
+<div class="codehilite"><pre><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">nginx</span> <span class="n">start</span>
+</pre></div>
+
+
+<p>Then </p>
+<div class="codehilite"><pre><span class="n">rm</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span><span class="o">/</span><span class="n">default</span>
+<span class="n">touch</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">codebase</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">codebase</span>  <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span><span class="o">/</span><span class="n">codebase</span>
+</pre></div>
+
+
+<p>To <code>/etc/nginx/sites-enabled/codebase</code> add</p>
+<div class="codehilite"><pre><span class="n">server</span> <span class="p">{</span>
+    <span class="n">location</span> <span class="o">/</span> <span class="p">{</span>
+        <span class="n">proxy_pass</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span>127<span class="p">.</span>0<span class="p">.</span>0<span class="p">.</span>1<span class="p">:</span>8000<span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>And restart nginx with </p>
+<div class="codehilite"><pre><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">nginx</span> <span class="n">restart</span>
+</pre></div>
+
+
+<p>Now, from inside <code>codebase</code> run</p>
+<div class="codehilite"><pre><span class="n">gunicorn</span> <span class="n">app</span><span class="p">:</span><span class="n">app</span> <span class="o">-</span><span class="n">b</span> <span class="n">localhost</span><span class="p">:</span>8000
+</pre></div>
+
+
+<p>If everything went right, if you visit <a href="http://33.33.33.33/">http://33.33.33.33/</a> you should now see the "Hello World!" message. Congratulations! You've successfully set up your own server.</p>
+	</article>
+
   <h3 class="date">May 03, 2012</h3>
     <article>
 	<hgroup>
@@ -87,27 +233,6 @@
 <p>So, we probably won't see much direct contribution from hackers in this field. That is a really sad thing, given that they played such a huge role in the digital revolution. But who knows, maybe something will come along that will change this, somehting like the <a href="http://en.wikipedia.org/wiki/Altair_8800">Altair 8800</a> for the PC revolution. </p>
 	</article>
 
-  <h3 class="date">October 21, 2011</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2011/10/videodropper-behind-the-scenes" title="Permalink to Videodropper- Behind the scenes">Videodropper- Behind the scenes</a></h2>
-	
-	</hgroup>
-	<p>My <a href="http://samrat.github.com/blog/videodropper.html">previous post</a> about my new web app- <a href="http://videodropper.ep.io">Videodropper</a>, which lets you send Youtube videos to your Dropbox account got quite huge on Hacker News yesterday(At least, much more than I'd anticipated). So, I decided to write another post about Videodropper on how it works.</p>
-<p>Videodropper is powered by <a href="http://python.org">Python</a>, <a href="http://flask.pocoo.org">Flask</a>, <a href="http://redis.io">Redis</a> and <a href="http://celeryproject.org">Celery</a>. It is hosted on <a href="http://ep.io">Epio</a>(as you might have guessed from the ep.io subdomain). All the downloading is handled by <a href="https://github.com/rg3/youtube-dl">youtube-dl</a> and of course, the uploading is done using the Dropbox API. 
-<br/><br/></p>
-<h2>Basics</h2>
-<p>What happens when you press the "Send to Dropbox" button is that Videodropper gets the Youtube video URL(playlists won't work, more on that later), and it queues it up on a Celeryd process; when the download starts, another process also starts that monitors the size of the video file so that it doesn't cross the upload limit. So, that's two processes for one file download. Currently, Videodropper runs only four processes which means that it can process only two videos at a time. Up until now, these modest resources have served quite well, as the download and upload speed is pretty high. However, the Celery instance, which is limited to 128MB of memory runs out of memory when Videodropper starts getting a lot of requests. </p>
-<p>When Celery starts a task which in this case is a "download, then upload", youtube-dl starts downloading the Youtube video which, as I mentioned above happens quite fast. Then, if the size hasn't exceeded Dropbox's upload limit(which is 150MB now, but it should soon be upgraded to 300MB), the upload process begins. That's basically the core functionality of the app. Oh, and if you choose to optimize the video for iPhone, youtube-dl simply downloads the .mp4 file(Youtube format=18) of the video, no transcoding takes place.
-<br/><br/></p>
-<h2>Size monitoring</h2>
-<p>One obvious optimization for Videodropper is the size-monitoring as you've seen that it eats up a whole process. One solution would have been to find out the file size before downloading, but I couldn't find any way to do that(if you happen to know of any please, please tell me about it.)
-<br/><br/></p>
-<h2>Playlist support</h2>
-<p>I've got some requests for Videodropper to start supporting playlists which is quite a reasonable request, given that Playlists is a huge part of Youtube. However, at present supporting playlists is just not an option. As I've mentioned above, Videodropper runs on a very modest server configuration and downloading playlists would surely cause Videodropper to run out of memory. The limits on the server resources are mostly because Videodropper is a free app, so I am not able to invest much money on it, so if you're interested in supporting Videodropper you could <a href="https://flattr.com/thing/414622/Videodropper">donate some money on Flattr</a> to help upgrade Videodropper's server capacity.</p>
-<p>In a nutshell, Flask serves the website, Celery queues up the download tasks(and also a size monitoring task) and Redis is used mostly as a backend to Celery, but also for storing the "Recent Downloads" of the user. That's it. If you have any query or suggestion feel free to shoot them at the comments below. </p>
-	</article>
-
 
 
 <p class="paginator">
@@ -146,13 +271,14 @@ var twitter_integration_enabled = true,
 
 
     <script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-18986645-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
     </script>
-    <script type="text/javascript">
-    try {
-        var pageTracker = _gat._getTracker("UA-18986645-3");
-    pageTracker._trackPageview();
-    } catch(err) {}</script>
 
 </body>

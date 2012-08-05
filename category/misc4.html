@@ -41,6 +41,17 @@
 
 <section class="main-section blog-section" id="blog-posts">
   
+  <h3 class="date">September 08, 2011</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2011/09/instamator" title="Permalink to Instamator">Instamator</a></h2>
+	
+	</hgroup>
+	<p>I have been wanting to create a serious web app for some time now, and I think I just did. Well, to be more accurate its a pretty simple web service. Let me introduce to you <a href="http://instamator.ep.io">Instamator</a>, it lets you easily grab and use the photos you've liked on Instagram, the popular photo-sharing app(for iOS devices only- but you can check <a href="http://inkstagram.com/">Inkstagram</a> for a web interface). </p>
+<p>How does it do that? It produces feeds(JSON, RSS and text) about the photos you liked on Instagram which you can use to easily download all your Instagram "likes" or integrate on your website or blog. </p>
+<p>Instamator was inpired by <a href="http://flickmator.heroku.com">Flickmator</a>, a similar web service built by <a href="http://thomas.pelletier.im">Thomas Pelletier</a>. It is powered by <a href="http://flask.pocoo.org">Flask</a>, <a href="http://redis.io">Redis</a> and hosted on <a href="http://ep.io">ep.io</a>.</p>
+	</article>
+
   <h3 class="date">September 02, 2011</h3>
     <article>
 	<hgroup>
@@ -116,13 +127,14 @@ var twitter_integration_enabled = true,
 
 
     <script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-18986645-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
     </script>
-    <script type="text/javascript">
-    try {
-        var pageTracker = _gat._getTracker("UA-18986645-3");
-    pageTracker._trackPageview();
-    } catch(err) {}</script>
 
 </body>

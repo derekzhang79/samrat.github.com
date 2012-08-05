@@ -6,7 +6,7 @@
   <meta name="description" content="Personal website and blog of Samrat Man Singh. Follow him at @samratmansingh" />
   <meta name="keywords" content="Samrat Man Singh, python, flask, computers, technology, nepal" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Posts tagged 'instagram' | Samrat Man Singh </title>
+  <title>Posts tagged 'development environment' | Samrat Man Singh </title>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <link rel="stylesheet" href="http://samrat.me/theme/css/styles.min.css" type="text/css" media="screen, projection">
@@ -41,24 +41,20 @@
 
 <section class="main-section blog-section" id="blog-posts">
   
-    <h3 class="date">September 14, 2011</h3>
+    <h3 class="date">August 05, 2012</h3>
     <article>
 	<hgroup>
-	<h2><a href="blog/2011/09/instamator-is-now-open-source" title="Permalink to Instamator is now open source">Instamator is now open source</a></h2>
+	<h2><a href="blog/2012/08/an-ide-as-a-packaged-chrome-app" title="Permalink to An IDE as a packaged Chrome app">An IDE as a packaged Chrome app</a></h2>
 	
 	</hgroup>
-	<p><a href="http://instamator.ep.io">Instamator</a>, which I <a href="http://samrat.github.com/blog/instamator.html">released just a few days ago</a> is now open source. You can find the source code on <a href="http://github.com/samrat/instamator">Github</a>. Instamator is powered by <a href="http://flask.pocoo.org">Flask</a> and makes use of <a href="http://redis.io">Redis</a>. </p>
-	</article>
+	<p>Everyone is talking about how browsers are getting more powerful. With recent developments such as Google's V8 Javascript engine, web browsers are being viewed more and more as platforms and not as mere "document viewers" to the web. The Chromebook is probably the best example I can site of this paradigm shift.</p>
+<p>Anyways as browsers become more powerful, attempts to create development environments based on browsers have also gotten more agressive. The most notable of these attempts is probably <a href="http://app.kodowa.com/playground">Light Table</a>, which is a really sleek IDE that runs on the browser. (Just to be accurate for Light Table, the actual "evaluation" of the code happens outside the browser)</p>
+<p>Its first beta version that's called Light Table Playground was released a while back, and while the initial "pitch" had seemed really promising, <strong>I found that programming inside the browser was not something that I enjoyed doing</strong>. Well, I know that the guys working on Light Table are developing the tool as an in-browser tool. And I think an IDE that can talk to the Internet is the right way to go.</p>
+<p>What I really want to see is an <strong>IDE that acts as first-class desktop app, but can still talk to the web</strong>, like most web apps. And yes, that would be something close to Chrome apps, but the Google Chrome team recently(it was about a month back) announced that Chrome apps are about to get an overhaul that is more along the lines of what I'm talking about:</p>
+<iframe width="560" height="315" src="http://www.youtube.com/embed/lBUGTVIJVfM" frameborder="0" allowfullscreen></iframe>
 
-    <h3 class="date">September 08, 2011</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2011/09/instamator" title="Permalink to Instamator">Instamator</a></h2>
-	
-	</hgroup>
-	<p>I have been wanting to create a serious web app for some time now, and I think I just did. Well, to be more accurate its a pretty simple web service. Let me introduce to you <a href="http://instamator.ep.io">Instamator</a>, it lets you easily grab and use the photos you've liked on Instagram, the popular photo-sharing app(for iOS devices only- but you can check <a href="http://inkstagram.com/">Inkstagram</a> for a web interface). </p>
-<p>How does it do that? It produces feeds(JSON, RSS and text) about the photos you liked on Instagram which you can use to easily download all your Instagram "likes" or integrate on your website or blog. </p>
-<p>Instamator was inpired by <a href="http://flickmator.heroku.com">Flickmator</a>, a similar web service built by <a href="http://thomas.pelletier.im">Thomas Pelletier</a>. It is powered by <a href="http://flask.pocoo.org">Flask</a>, <a href="http://redis.io">Redis</a> and hosted on <a href="http://ep.io">ep.io</a>.</p>
+<p>Having such an app would feel comfortable while still leveraging the power of the mighty "clouds". Since I already keep my <code>code/</code> folder inside Dropbox, I'd say that the app could take Dropbox as a "role model". The app would be available offline, but when its online it would start syncing to its servers so you can access your code anywhere.</p>
+<p>Ideally, the app would be a one-click install which would set up your development environment exactly as you've configured. And of course, there's bonus points for modeling this around Vim :)</p>
 	</article>
 
 </section>

@@ -122,6 +122,22 @@
 </p>
 	</article>
 
+  <h3 class="date">August 05, 2012</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2012/08/an-ide-as-a-packaged-chrome-app" title="Permalink to An IDE as a packaged Chrome app">An IDE as a packaged Chrome app</a></h2>
+	
+	</hgroup>
+	<p>Everyone is talking about how browsers are getting more powerful. With recent developments such as Google's V8 Javascript engine, web browsers are being viewed more and more as platforms and not as mere "document viewers" to the web. The Chromebook is probably the best example I can site of this paradigm shift.</p>
+<p>Anyways as browsers become more powerful, attempts to create development environments based on browsers have also gotten more agressive. The most notable of these attempts is probably <a href="http://app.kodowa.com/playground">Light Table</a>, which is a really sleek IDE that runs on the browser. (Just to be accurate for Light Table, the actual "evaluation" of the code happens outside the browser)</p>
+<p>Its first beta version that's called Light Table Playground was released a while back, and while the initial "pitch" had seemed really promising, <strong>I found that programming inside the browser was not something that I enjoyed doing</strong>. Well, I know that the guys working on Light Table are developing the tool as an in-browser tool. And I think an IDE that can talk to the Internet is the right way to go.</p>
+<p>What I really want to see is an <strong>IDE that acts as first-class desktop app, but can still talk to the web</strong>, like most web apps. And yes, that would be something close to Chrome apps, but the Google Chrome team recently(it was about a month back) announced that Chrome apps are about to get an overhaul that is more along the lines of what I'm talking about:</p>
+<iframe width="560" height="315" src="http://www.youtube.com/embed/lBUGTVIJVfM" frameborder="0" allowfullscreen></iframe>
+
+<p>Having such an app would feel comfortable while still leveraging the power of the mighty "clouds". Since I already keep my <code>code/</code> folder inside Dropbox, I'd say that the app could take Dropbox as a "role model". The app would be available offline, but when its online it would start syncing to its servers so you can access your code anywhere.</p>
+<p>Ideally, the app would be a one-click install which would set up your development environment exactly as you've configured. And of course, there's bonus points for modeling this around Vim :)</p>
+	</article>
+
   <h3 class="date">June 23, 2012</h3>
     <article>
 	<hgroup>
@@ -279,17 +295,6 @@
 <p>If everything went right, if you visit <a href="http://33.33.33.33/">http://33.33.33.33/</a> you should now see the "Hello World!" message. Congratulations! You've successfully set up your own server.</p>
 	</article>
 
-  <h3 class="date">June 28, 2012</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2012/06/googles-answer-to-siri-now" title="Permalink to Google's answer to Siri: Now">Google's answer to Siri: Now</a></h2>
-	
-	</hgroup>
-	<p>If you've been following the tech world recently you'd know that Apple and Google haven't been the best of friends lately. You know, because Google ripped off Apple the same way Microsoft had ripped them off back when the PC boom was kicking off. There's a statement by Steve Jobs in his biography which can only be regarded as a declaration of war on Google. And we are starting to actually see this war taking place- a few weeks ago, Apple declared that the new iOS will come with its own 'Google Maps'-like service instead of Google Maps.</p>
-<p>And now, Google too has announced its answer to what was iOS 5's most famous addition- Siri. It's not exactly like Siri- in fact, Google has tried to go a step further and make a more smarter system. If Google succeeds in rolling out Project Glass then Google Now will be a pretty nifty feature for it too. Watch the video below to find out what Now is all about:</p>
-<iframe width="560" height="315" src="http://www.youtube.com/embed/pPqliPzHYyc" frameborder="0" allowfullscreen></iframe>
-	</article>
-
 
 
 <p class="paginator">
@@ -324,13 +329,14 @@ var twitter_integration_enabled = true,
 
 
     <script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-18986645-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
     </script>
-    <script type="text/javascript">
-    try {
-        var pageTracker = _gat._getTracker("UA-18986645-3");
-    pageTracker._trackPageview();
-    } catch(err) {}</script>
 
 </body>
