@@ -1,4 +1,5 @@
 Title: Extracting feed articles in Clojure
+Date: 2012-08-21 21:10
 tags: clojure, programming
 
 I'm reading [**Programming Collective Intelligence**][pci] by [**Toby Segaran**][kiwitobes] and doing the examples in Clojure. *Chapter 3* in the book shows you how to cluster similar blogs together using word-frequencies generated from their feeds. 
