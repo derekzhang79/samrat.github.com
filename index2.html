@@ -43,6 +43,75 @@
 
 <section class="main-section blog-section" id="blog-posts">
   
+  <h3 class="date">June 04, 2012</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box" title="Permalink to A first look at provisioning with Puppet(on a Vagrant box)">A first look at provisioning with Puppet(on a Vagrant box)</a></h2>
+	
+	</hgroup>
+	<p>In my <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/">previous post</a>, I talked about deploying a Flask app on a Vagrant box using Gunicorn and Nginx. The response I got was mind-blowing, so I've decided to write about another neat tool that's awesome for deploying web apps- Puppet. <a href="http://vagrantup.com">Vagrant</a> actually encourages its users to use it, and you should use it. <strong>There's also an alternative to Puppet called <a href="http://www.opscode.com/chef/">Chef</a>; some people prefer that over Puppet, so you might want to check it out.</strong></p>
+<p>Hopefully I'll be able to demonstrate what Puppet does and why its awesome in this post. But please note that this isn't meant as a comprehensive tutorial, you should check out Puppet's <a href="http://docs.puppetlabs.com/">docs</a> for that. Also even though the Puppet docs asks you to get the Learning Puppet VM, I found it much more comfortable to use <code>vagrant ssh</code> for learning Puppet, so if you already have Vagraant installed, you might want to try that out too- just try running <code>puppet</code> inside the virtual machine. </p>
+<p>What Puppet does is something called <em>provisioning</em>- that means that it <em><a href="http://www.youtube.com/watch?v=bP8Mtiuc8XM">makes computers do what they are supposed to do</a></em>. In other words, it does the configuring for you. To understand what that means, let's see it in action.</p>
+<p>First create a Vagrant box, </p>
+<div class="codehilite"><pre><span class="n">mkdir</span> <span class="n">codebase_with_puppet</span>
+<span class="n">cd</span> <span class="n">codebase_with_puppet</span>
+
+<span class="n">vagrant</span> <span class="n">init</span>
+</pre></div>
+
+
+<p>You should now see Vagrantfile. Open it with a text editor, then uncomment the lines</p>
+<div class="codehilite"><pre><span class="n">config</span><span class="p">.</span><span class="n">vm</span><span class="p">.</span><span class="n">provision</span> <span class="p">:</span><span class="n">puppet</span> <span class="n">do</span> <span class="o">|</span><span class="n">puppet</span><span class="o">|</span>
+    <span class="n">puppet</span><span class="p">.</span><span class="n">manifests_path</span> <span class="p">=</span> &quot;<span class="n">manifests</span>&quot;
+    <span class="n">puppet</span><span class="p">.</span><span class="n">manifest_file</span>  <span class="p">=</span> &quot;<span class="n">base</span><span class="p">.</span><span class="n">pp</span>&quot;
+<span class="k">end</span>
+</pre></div>
+
+
+<p>Now, create <code>base.pp</code> inside a folder called manifests, and add the following to it.</p>
+<div class="codehilite"><pre><span class="n">package</span> <span class="p">{</span>&quot;<span class="n">nginx</span>&quot;<span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">present</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Now, run <code>vagrant up</code>. You'll notice that Vagrant automatically installs <code>nginx</code> after it boots the VM. You should get a message like </p>
+<div class="codehilite"><pre><span class="n">notice</span><span class="p">:</span> <span class="o">/</span><span class="n">Stage</span><span class="p">[</span><span class="n">main</span><span class="p">]</span><span class="o">//</span><span class="n">Package</span><span class="p">[</span><span class="n">nginx</span><span class="p">]</span><span class="o">/</span><span class="n">ensure</span><span class="p">:</span> <span class="n">ensure</span> <span class="n">changed</span> <span class="s">&#39;purged&#39;</span> <span class="n">to</span> <span class="s">&#39;present&#39;</span>
+</pre></div>
+
+
+<p>This can become a real treasure as this way, you won't have to memorize what you need to install, to get the app running. All the system needs is to have <code>puppet</code> installed, after that <code>puppet</code> with the right manifests will handle everything. </p>
+<p>Now, let's do something different with Puppet- instead of installing another package, we'll use it to configure <code>nginx</code>. </p>
+<p>First, create a file in your local machine, inside <code>codebase_with_puppet</code> called <code>codebase_nginx</code>. To that file add the following</p>
+<div class="codehilite"><pre><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:8000</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>If you've gone through the <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/">previous post</a> you'll notice that it's the same configuration that we had used. </p>
+<p>Now, we'll use Puppet to make sure that the configuration file is placed where its supposed to be. To your <code>base.pp</code> file, add </p>
+<div class="codehilite"><pre><span class="n">file</span> <span class="p">{</span>&quot;<span class="n">rm</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="n">default</span>&quot;<span class="p">:</span>
+    <span class="n">path</span> <span class="p">=</span><span class="o">&gt;</span> <span class="s">&#39;/etc/nginx/sites-enabled/default&#39;</span><span class="p">,</span>
+    <span class="n">ensure</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">absent</span><span class="p">,</span>
+    <span class="n">require</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">Package</span><span class="p">[</span><span class="s">&#39;nginx&#39;</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">file</span> <span class="p">{</span>&quot;<span class="n">setup</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="n">codebase</span>&quot;<span class="p">:</span>
+    <span class="n">path</span> <span class="p">=</span><span class="o">&gt;</span> <span class="s">&#39;/etc/nginx/sites-enabled/codebase_nginx&#39;</span><span class="p">,</span>
+    <span class="n">ensure</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">present</span><span class="p">,</span>
+    <span class="n">require</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">Package</span><span class="p">[</span><span class="s">&#39;nginx&#39;</span><span class="p">],</span>
+    <span class="n">source</span> <span class="p">=</span><span class="o">&gt;</span> &quot;<span class="o">/</span><span class="n">vagrant</span><span class="o">/</span><span class="n">codebase_nginx</span>&quot;<span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Run <code>vagrant reload</code> and you're done with the <code>nginx</code> configuration. Besides removing the repetitiveness for you, Puppet is also wonderful when you're working on a team or on an open-source project. Now, all you need to do is write the manifests and once you share them you can rest assured that the entire team has the exact same environment.<br />
+</p>
+	</article>
+
   <h3 class="date">May 27, 2012</h3>
     <article>
 	<hgroup>
@@ -220,19 +289,6 @@
 <p>That was my introduction to the Internet: it was a butler who would try to satisfy my curiosities. However as I see it, things are changing. If I were to guess, I’d say that most people who start using the Internet these days start from social networking sites like Facebook. Now, I’ve got nothing against Facebook or social networking tools but I just don’t think that a person’s first impression of the Internet should be that it was built to emulate real-world society. Nor should kids be limited to a walled site that gives them a very limited perspective of the Internet. The internet is so much more than that. It’s so much more than what, in my opinion, most people perceive it to be. And I believe that everyone should know and make use of the endless opportunities it creates.</p>
 <p>The way people are being introduced to the internet may also be damaging to the whole ethos of the internet itself. For instance, someone with the impression that the purpose for building the Internet was to network socially will probably never make a significant contribution to the knowledge base of the internet. Furthermore, I think that these are the people who go around making stupid comments which don’t add any value to the conversation.</p>
 <p>The number of internet users is growing rapidly but do we want these people to stay limited to the walled gardens of Facebook or so many other sites which are pretty fun to hang out but limit its users off what is a gigantuan amount of knowledge? I think that we really need to rethink the way that we are introducing people to the internet. That is absolutely necessary if we are to keep the resourcefulness of the internet sustainable.</p>
-	</article>
-
-  <h3 class="date">October 29, 2011</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2011/10/the-intersection-between-biology-and-technology" title="Permalink to The intersection between biology and technology">The intersection between biology and technology</a></h2>
-	
-	</hgroup>
-	<p>Towards the end of <a href="http://www.amazon.com/gp/product/1451648537/ref=as_li_ss_tl?ie=UTF8&amp;tag=samrat09-20&amp;linkCode=as2&amp;camp=217145&amp;creative=399373&amp;creativeASIN=1451648537">'Steve Jobs' by Walter Isaacson</a>(the Steve Jobs bio), there's a quote by Steve Jobs that says something along the line of "The greatest advancements we will see in the twenty-first century will come from the <em>intersection of biology and technology</em>." Since this comes from a visionary who foresaw and made possible so many of today's great technologies and products, this statement is particularly hard to ignore. </p>
-<p>So I began to wonder what these advancements would be like. Well, I got all sorts of ideas of what kind of innovations we could be expecting- nanobots fighting cancer cells, cyborgs(or maybe just enhanced human bodies), longer lifetimes, and lots of other fancy ideas. But, pretty soon I began wondering how much of these innovations would come from hackers. Many of the digital age's greatest innovations came from hackers working in their parents garage, so will we see any innovations in this era of "the intersection of biology and technology" coming from teenagers working on their own? Or will almost all of these innovations come from high-tech research labs?</p>
-<p>Hackers in the digital age innovated by tinkering. <a href="http://en.wikipedia.org/wiki/Steve_Wozniak">Steve Wozniak</a> practically taught himself to build computers. A really large portion of programmers are self taught. But, will we see guys who taught themselves to, say, sequence the DNA? Or someone who created nanobots that could enter our blood streams and fight diseases? Tinkering with electronics or software requires easily available resources like electronics components or just a computer. If you want to start tinkering with biotech, however, you'll arguably require much sophisticated devices. Also, security issues like bioterrorism arise when anyone can have access to these resources. </p>
-<p>Biology-hackers will probably have a much harder time getting the resources they need than the computer hackers did, but even if they did get the resources, the products or research they come up with is unlikely to become something really big. Because for one thing, no one would really trust products coming from college dropouts hacking in a garage enough to have have anything to do with their bodies. </p>
-<p>So, we probably won't see much direct contribution from hackers in this field. That is a really sad thing, given that they played such a huge role in the digital revolution. But who knows, maybe something will come along that will change this, somehting like the <a href="http://en.wikipedia.org/wiki/Altair_8800">Altair 8800</a> for the PC revolution. </p>
 	</article>
 
 

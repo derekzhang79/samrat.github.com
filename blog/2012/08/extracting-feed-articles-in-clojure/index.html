@@ -6,7 +6,7 @@
   <meta name="description" content="Personal website and blog of Samrat Man Singh. Follow him at @samratmansingh" />
   <meta name="keywords" content="Samrat Man Singh, python, flask, computers, technology, nepal" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Samrat Man Singh</title>
+  <title>Extracting feed articles in Clojure | Samrat Man Singh</title>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <link rel="stylesheet" href="http://samrat.me/theme/css/styles.min.css" type="text/css" media="screen, projection">
@@ -42,12 +42,11 @@
 </header>
 
 <section class="main-section blog-section" id="blog-posts">
-  
-  <h3 class="date">August 21, 2012</h3>
-    <article>
+	<h3 class="date">August 21, 2012</h3>
+  <article>
 	<hgroup>
-	<h2><a href="blog/2012/08/extracting-feed-articles-in-clojure" title="Permalink to Extracting feed articles in Clojure">Extracting feed articles in Clojure</a></h2>
 	
+	<h2><a href="http://samrat.me/blog/2012/08/extracting-feed-articles-in-clojure">Extracting feed articles in Clojure</a></h2>
 	</hgroup>
 	<p>I'm reading <a href="http://shop.oreilly.com/product/9780596529321.do"><strong>Programming Collective Intelligence</strong></a> by <a href="http://kiwitobes.com/"><strong>Toby Segaran</strong></a> and doing the examples in Clojure. <em>Chapter 3</em> in the book shows you how to cluster similar blogs together using word-frequencies generated from their feeds. </p>
 <p>Now, some blogs annoyingly give out just a link to the post or just a short blurb of the post in their feeds. That proved to be a major annoyance but I found a workaround to deal with it, which I will describe in this post. </p>
@@ -94,71 +93,46 @@
 
 
 <p>I hope that helped clear out or avoid at least some confusion. You can shoot out any queries or feedback to <a href="http://twitter.com/samratmansingh">@samratmansingh</a></p>
+
+	<p>
+	If you liked this post, you should <a href="http://twitter.com/samratmansingh">follow me on Twitter.</a>
+	</p>
+	
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="samratmansingh" data-size="large" data-count="none">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+	<br/><br/>		
+	<footer>
+
+	
+	<h3>Related posts</h3>
+        <ul>
+        
+		<li><a href="blog/2011/10/the-gamification-of-games">The Gamification of Games</a></li>
+        
+        </ul>
+    
+
+
+	
+	<h4>TAGS</h4>
+	<ul class="tags">
+	
+	<li><a href="http://samrat.me/tag/clojure.html" class="tag">clojure</a></li>
+	
+	<li><a href="http://samrat.me/tag/programming.html" class="tag">programming</a></li>
+	
+	</ul>
+	
+
+	<br/>
+
+	 <a href="/" class="button_accent">&larr;&nbsp;&nbsp;&nbsp;back to blog</a>
+
+	</footer>
 	</article>
-
-  <h3 class="date">August 05, 2012</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2012/08/an-ide-as-a-packaged-chrome-app" title="Permalink to An IDE as a packaged Chrome app">An IDE as a packaged Chrome app</a></h2>
-	
-	</hgroup>
-	<p>Everyone is talking about how browsers are getting more powerful. With recent developments such as Google's V8 Javascript engine, web browsers are being viewed more and more as platforms and not as mere "document viewers" to the web. The Chromebook is probably the best example I can site of this paradigm shift.</p>
-<p>Anyways as browsers become more powerful, attempts to create development environments based on browsers have also gotten more agressive. The most notable of these attempts is probably <a href="http://app.kodowa.com/playground">Light Table</a>, which is a really sleek IDE that runs on the browser. (Just to be accurate for Light Table, the actual "evaluation" of the code happens outside the browser)</p>
-<p>Its first beta version that's called Light Table Playground was released a while back, and while the initial "pitch" had seemed really promising, <strong>I found that programming inside the browser was not something that I enjoyed doing</strong>. Well, I know that the guys working on Light Table are developing the tool as an in-browser tool. And I think an IDE that can talk to the Internet is the right way to go.</p>
-<p>What I really want to see is an <strong>IDE that acts as first-class desktop app, but can still talk to the web</strong>, like most web apps. And yes, that would be something close to Chrome apps, but the Google Chrome team recently(it was about a month back) announced that Chrome apps are about to get an overhaul that is more along the lines of what I'm talking about:</p>
-<iframe width="560" height="315" src="http://www.youtube.com/embed/lBUGTVIJVfM" frameborder="0" allowfullscreen></iframe>
-
-<p>Having such an app would feel comfortable while still leveraging the power of the mighty "clouds". Since I already keep my <code>code/</code> folder inside Dropbox, I'd say that the app could take Dropbox as a "role model". The app would be available offline, but when its online it would start syncing to its servers so you can access your code anywhere.</p>
-<p>Ideally, the app would be a one-click install which would set up your development environment exactly as you've configured. And of course, there's bonus points for modeling this around Vim :)</p>
-	</article>
-
-  <h3 class="date">July 07, 2012</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2012/07/help-me-buy-a-domain-name" title="Permalink to Help me buy a domain name">Help me buy a domain name</a></h2>
-	
-	</hgroup>
-	<p><strong>UPDATE- <a href="http://news.ycombinator.com/user?id=Udo">Udo</a> on Hacker News was kind enough to buy me a domain. This site can now be reached at <a href="http://samrat.me">http://samrat.me</a>. Thanks a lot, Udo.</strong></p>
-<p>I've got a problem. I want to buy a domain name for this website. But due to some banking regulations in my country, online payments cannot be made(for international transactions, at least.) Some companies <em>are</em> making money by buying products on Amazon and other online shops on behalf of people here, but they're limited to only physical goods. </p>
-<p>This problem has been troubling me for a while, and I've come up with what could be a solution. Following all the recent buzz around Kickstarter- I decided to ask the Internet for help, but don't worry, <strong>I'm not asking for your money</strong>. </p>
-<p>If you're still reading this and interested in helping <em>and if you happen to be a person who is about to buy a domain name</em>, you can support my cause by buying a domain name with my <a href="http://www.namecheap.com?aff=34707">affiliate link</a> on Namecheap. That way, a small percentage of what you spend on Namecheap might help me get a domain name for myself. But if you're not interested, no pressure, I can live without a domain name; just please don't take this the wrong way.</p>
-<p>If you're interested in helping but not looking to register a domain name right now, you could bookmark the link above and use that to make your purchase later. As you can probably tell, I haven't used Namecheap but I've heard they're great!</p>
-<p>Thank you :)</p>
-	</article>
-
-  <h3 class="date">June 28, 2012</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2012/06/googles-answer-to-siri-now" title="Permalink to Google's answer to Siri: Now">Google's answer to Siri: Now</a></h2>
-	
-	</hgroup>
-	<p>If you've been following the tech world recently you'd know that Apple and Google haven't been the best of friends lately. You know, because Google ripped off Apple the same way Microsoft had ripped them off back when the PC boom was kicking off. There's a statement by Steve Jobs in his biography which can only be regarded as a declaration of war on Google. And we are starting to actually see this war taking place- a few weeks ago, Apple declared that the new iOS will come with its own 'Google Maps'-like service instead of Google Maps.</p>
-<p>And now, Google too has announced its answer to what was iOS 5's most famous addition- Siri. It's not exactly like Siri- in fact, Google has tried to go a step further and make a more smarter system. If Google succeeds in rolling out Project Glass then Google Now will be a pretty nifty feature for it too. Watch the video below to find out what Now is all about:</p>
-<iframe width="560" height="315" src="http://www.youtube.com/embed/pPqliPzHYyc" frameborder="0" allowfullscreen></iframe>
-	</article>
-
-  <h3 class="date">June 23, 2012</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2012/06/every-minute-of-the-day" title="Permalink to Every minute of the day...">Every minute of the day...</a></h2>
-	
-	</hgroup>
-	<p>I found this totally neat infograph today on <a href="http://www.visualnews.com/2012/06/19/how-much-data-created-every-minute/?view=infographic">Visual News</a> and thought I'd share it with you guys. </p>
-<p><a href="http://www.visualnews.com/2012/06/19/how-much-data-created-every-minute/?view=infographic"><img src="http://visualnews.columnfivemedia.netdna-cdn.com/wp-content/uploads/2012/06/DOMO-Data-in-One-Minute.jpg" style="width:675px; padding:10px;"/></a></p>
-<p>Now, for a shameless plug: you might want to check out a web app I made a few weeks ago that helps you put into context how fast video is being added to Youtube- <a href="http://omgyoutube.herokuapp.com/">OMGYoutube</a>.</p>
-	</article>
-
-
-
-<p class="paginator">
-	
-	
-		<a href="http://samrat.me/category/misc2.html" class="button_accent" style="float:right;">continue&nbsp;&nbsp;&nbsp;&rarr;</a>
-	
-</p>
-
-
 </section>
+
+
 
 <div class="mobile-nav">
   <span class="nav-btn" id="mobile-nav-btn">

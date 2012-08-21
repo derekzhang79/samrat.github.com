@@ -43,6 +43,59 @@
 
 <section class="main-section blog-section" id="blog-posts">
   
+  <h3 class="date">August 21, 2012</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2012/08/extracting-feed-articles-in-clojure" title="Permalink to Extracting feed articles in Clojure">Extracting feed articles in Clojure</a></h2>
+	
+	</hgroup>
+	<p>I'm reading <a href="http://shop.oreilly.com/product/9780596529321.do"><strong>Programming Collective Intelligence</strong></a> by <a href="http://kiwitobes.com/"><strong>Toby Segaran</strong></a> and doing the examples in Clojure. <em>Chapter 3</em> in the book shows you how to cluster similar blogs together using word-frequencies generated from their feeds. </p>
+<p>Now, some blogs annoyingly give out just a link to the post or just a short blurb of the post in their feeds. That proved to be a major annoyance but I found a workaround to deal with it, which I will describe in this post. </p>
+<p><em>(By the way, if you have a blog that publishes just links or blurbs, please consider changing your feed settings; you'll make a lot of people reading your blog using a feed reader, and a few programmers a lot happier)</em></p>
+<p>I used <a href="https://github.com/scsibug/feedparser-clj"><strong>feedparser-clj</strong></a> to parse feeds in order to grab the whole article from the feed, I used <a href="https://github.com/jiminoc/goose">Goose</a>, which is a Scala library. Because of this, you can't simply start using Goose by just adding it as a Leiningen dependency. Thankfully, there is a tool, <a href="https://github.com/kumarshantanu/lein-localrepo"><code>lein-localrepo</code></a> that greatly simplifies installing Leiningen or Maven repos from a local file(as opposed to from clojars.org). After installing localrepo, you need to install Goose:</p>
+<div class="codehilite"><pre><span class="n">lein</span> <span class="n">localrepo</span> <span class="n">coords</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">jar</span><span class="o">-</span><span class="n">file</span><span class="o">&gt;</span>
+</pre></div>
+
+
+<p>Which will give you something like <code>goose/target/goose-2.1.19.jar goose/goose 2.1.19</code>. Now, to actually install it:</p>
+<div class="codehilite"><pre><span class="n">lein</span> <span class="n">localrepo</span> <span class="n">install</span> <span class="n">goose</span><span class="o">/</span><span class="n">target</span><span class="o">/</span><span class="n">goose</span><span class="o">-</span>2<span class="p">.</span>1<span class="p">.</span>19<span class="p">.</span><span class="n">jar</span> <span class="n">goose</span><span class="o">/</span><span class="n">goose</span> 2<span class="p">.</span>1<span class="p">.</span>19
+</pre></div>
+
+
+<p>Then, add <code>[com.gravity/goose "2.1.19"]</code> to your project dependencies. Now, if you open a REPL in the project dir(using <code>lein repl</code>), you should be able to import stuff from Goose:</p>
+<div class="codehilite"><pre><span class="nb">import </span><span class="p">(</span><span class="nf">com.gravity.goose</span> <span class="nv">Goose</span> <span class="nv">Configuration</span> <span class="nv">Article</span><span class="p">))</span>
+</pre></div>
+
+
+<p>To extract the article from a URL, type in a function:</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="kd">defn </span><span class="nv">extract-article</span>
+<span class="s">&quot;Extracts the article from url.&quot;</span>
+<span class="p">[</span><span class="nv">url</span><span class="p">]</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">url</span>     <span class="nv">url</span>
+    <span class="nv">goose</span>   <span class="p">(</span><span class="nf">Goose.</span> <span class="p">(</span><span class="nf">Configuration.</span><span class="p">))</span>
+    <span class="nv">article</span> <span class="p">(</span><span class="nf">.extractContent</span> <span class="nv">goose</span> <span class="nv">url</span><span class="p">)]</span>
+        <span class="p">(</span><span class="nf">.cleanedArticleText</span> <span class="nv">article</span><span class="p">)))</span>
+</pre></div>
+
+
+<p>Next, we will extract a list of blog post URLs:</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="nf">use</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">feedparser-clj</span> <span class="ss">:exclude</span> <span class="p">(</span><span class="nf">-main</span><span class="p">)])</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">articles-list</span>
+<span class="p">[</span><span class="nv">feed-url</span><span class="p">]</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">parsed</span> <span class="p">(</span><span class="nf">parse-feed</span> <span class="nv">feed-url</span><span class="p">)]</span>
+    <span class="p">(</span><span class="nb">map </span><span class="ss">:link</span> <span class="p">(</span><span class="ss">:entries</span> <span class="nv">parsed</span><span class="p">))))</span>
+</pre></div>
+
+
+<p>Finally, to get all the extracted articles from a feed, you can map <code>extract-article</code> to a list of article URLs:</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="nb">map </span><span class="nv">extract-article</span> <span class="p">(</span><span class="nf">articles-list</span> <span class="s">&quot;http://samrat.me/feeds/all.xml&quot;</span><span class="p">))</span>
+</pre></div>
+
+
+<p>I hope that helped clear out or avoid at least some confusion. You can shoot out any queries or feedback to <a href="http://twitter.com/samratmansingh">@samratmansingh</a></p>
+	</article>
+
   <h3 class="date">August 05, 2012</h3>
     <article>
 	<hgroup>
@@ -93,75 +146,6 @@
 	<p>I found this totally neat infograph today on <a href="http://www.visualnews.com/2012/06/19/how-much-data-created-every-minute/?view=infographic">Visual News</a> and thought I'd share it with you guys. </p>
 <p><a href="http://www.visualnews.com/2012/06/19/how-much-data-created-every-minute/?view=infographic"><img src="http://visualnews.columnfivemedia.netdna-cdn.com/wp-content/uploads/2012/06/DOMO-Data-in-One-Minute.jpg" style="width:675px; padding:10px;"/></a></p>
 <p>Now, for a shameless plug: you might want to check out a web app I made a few weeks ago that helps you put into context how fast video is being added to Youtube- <a href="http://omgyoutube.herokuapp.com/">OMGYoutube</a>.</p>
-	</article>
-
-  <h3 class="date">June 04, 2012</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box" title="Permalink to A first look at provisioning with Puppet(on a Vagrant box)">A first look at provisioning with Puppet(on a Vagrant box)</a></h2>
-	
-	</hgroup>
-	<p>In my <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/">previous post</a>, I talked about deploying a Flask app on a Vagrant box using Gunicorn and Nginx. The response I got was mind-blowing, so I've decided to write about another neat tool that's awesome for deploying web apps- Puppet. <a href="http://vagrantup.com">Vagrant</a> actually encourages its users to use it, and you should use it. <strong>There's also an alternative to Puppet called <a href="http://www.opscode.com/chef/">Chef</a>; some people prefer that over Puppet, so you might want to check it out.</strong></p>
-<p>Hopefully I'll be able to demonstrate what Puppet does and why its awesome in this post. But please note that this isn't meant as a comprehensive tutorial, you should check out Puppet's <a href="http://docs.puppetlabs.com/">docs</a> for that. Also even though the Puppet docs asks you to get the Learning Puppet VM, I found it much more comfortable to use <code>vagrant ssh</code> for learning Puppet, so if you already have Vagraant installed, you might want to try that out too- just try running <code>puppet</code> inside the virtual machine. </p>
-<p>What Puppet does is something called <em>provisioning</em>- that means that it <em><a href="http://www.youtube.com/watch?v=bP8Mtiuc8XM">makes computers do what they are supposed to do</a></em>. In other words, it does the configuring for you. To understand what that means, let's see it in action.</p>
-<p>First create a Vagrant box, </p>
-<div class="codehilite"><pre><span class="n">mkdir</span> <span class="n">codebase_with_puppet</span>
-<span class="n">cd</span> <span class="n">codebase_with_puppet</span>
-
-<span class="n">vagrant</span> <span class="n">init</span>
-</pre></div>
-
-
-<p>You should now see Vagrantfile. Open it with a text editor, then uncomment the lines</p>
-<div class="codehilite"><pre><span class="n">config</span><span class="p">.</span><span class="n">vm</span><span class="p">.</span><span class="n">provision</span> <span class="p">:</span><span class="n">puppet</span> <span class="n">do</span> <span class="o">|</span><span class="n">puppet</span><span class="o">|</span>
-    <span class="n">puppet</span><span class="p">.</span><span class="n">manifests_path</span> <span class="p">=</span> &quot;<span class="n">manifests</span>&quot;
-    <span class="n">puppet</span><span class="p">.</span><span class="n">manifest_file</span>  <span class="p">=</span> &quot;<span class="n">base</span><span class="p">.</span><span class="n">pp</span>&quot;
-<span class="k">end</span>
-</pre></div>
-
-
-<p>Now, create <code>base.pp</code> inside a folder called manifests, and add the following to it.</p>
-<div class="codehilite"><pre><span class="n">package</span> <span class="p">{</span>&quot;<span class="n">nginx</span>&quot;<span class="p">:</span>
-    <span class="n">ensure</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">present</span><span class="p">,</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>Now, run <code>vagrant up</code>. You'll notice that Vagrant automatically installs <code>nginx</code> after it boots the VM. You should get a message like </p>
-<div class="codehilite"><pre><span class="n">notice</span><span class="p">:</span> <span class="o">/</span><span class="n">Stage</span><span class="p">[</span><span class="n">main</span><span class="p">]</span><span class="o">//</span><span class="n">Package</span><span class="p">[</span><span class="n">nginx</span><span class="p">]</span><span class="o">/</span><span class="n">ensure</span><span class="p">:</span> <span class="n">ensure</span> <span class="n">changed</span> <span class="s">&#39;purged&#39;</span> <span class="n">to</span> <span class="s">&#39;present&#39;</span>
-</pre></div>
-
-
-<p>This can become a real treasure as this way, you won't have to memorize what you need to install, to get the app running. All the system needs is to have <code>puppet</code> installed, after that <code>puppet</code> with the right manifests will handle everything. </p>
-<p>Now, let's do something different with Puppet- instead of installing another package, we'll use it to configure <code>nginx</code>. </p>
-<p>First, create a file in your local machine, inside <code>codebase_with_puppet</code> called <code>codebase_nginx</code>. To that file add the following</p>
-<div class="codehilite"><pre><span class="k">server</span> <span class="p">{</span>
-    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
-        <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:8000</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>If you've gone through the <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/">previous post</a> you'll notice that it's the same configuration that we had used. </p>
-<p>Now, we'll use Puppet to make sure that the configuration file is placed where its supposed to be. To your <code>base.pp</code> file, add </p>
-<div class="codehilite"><pre><span class="n">file</span> <span class="p">{</span>&quot;<span class="n">rm</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="n">default</span>&quot;<span class="p">:</span>
-    <span class="n">path</span> <span class="p">=</span><span class="o">&gt;</span> <span class="s">&#39;/etc/nginx/sites-enabled/default&#39;</span><span class="p">,</span>
-    <span class="n">ensure</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">absent</span><span class="p">,</span>
-    <span class="n">require</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">Package</span><span class="p">[</span><span class="s">&#39;nginx&#39;</span><span class="p">],</span>
-<span class="p">}</span>
-
-<span class="n">file</span> <span class="p">{</span>&quot;<span class="n">setup</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="n">codebase</span>&quot;<span class="p">:</span>
-    <span class="n">path</span> <span class="p">=</span><span class="o">&gt;</span> <span class="s">&#39;/etc/nginx/sites-enabled/codebase_nginx&#39;</span><span class="p">,</span>
-    <span class="n">ensure</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">present</span><span class="p">,</span>
-    <span class="n">require</span> <span class="p">=</span><span class="o">&gt;</span> <span class="n">Package</span><span class="p">[</span><span class="s">&#39;nginx&#39;</span><span class="p">],</span>
-    <span class="n">source</span> <span class="p">=</span><span class="o">&gt;</span> &quot;<span class="o">/</span><span class="n">vagrant</span><span class="o">/</span><span class="n">codebase_nginx</span>&quot;<span class="p">,</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>Run <code>vagrant reload</code> and you're done with the <code>nginx</code> configuration. Besides removing the repetitiveness for you, Puppet is also wonderful when you're working on a team or on an open-source project. Now, all you need to do is write the manifests and once you share them you can rest assured that the entire team has the exact same environment.<br />
-</p>
 	</article>
 
 

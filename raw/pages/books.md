@@ -1,6 +1,7 @@
 Title: Books I've Read
 slug: books
 
+- **Sphere** by Michael Crichton
 - **The Girl Who Kicked the Hornet's Nest** by Stieg Larsson
 - **The Girl Who Played with Fire** by Stieg Larsson
 - **The Girl With the Dragon Tattoo** by Stieg Larsson
