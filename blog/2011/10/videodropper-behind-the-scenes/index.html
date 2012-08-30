@@ -48,6 +48,7 @@
 	
 	<h2><a href="http://samrat.me/blog/2011/10/videodropper-behind-the-scenes">Videodropper- Behind the scenes</a></h2>
 	</hgroup>
+	<div class="rt_readable">Reading Time: </div>
 	<p>My <a href="http://samrat.github.com/blog/videodropper.html">previous post</a> about my new web app- <a href="http://videodropper.ep.io">Videodropper</a>, which lets you send Youtube videos to your Dropbox account got quite huge on Hacker News yesterday(At least, much more than I'd anticipated). So, I decided to write another post about Videodropper on how it works.</p>
 <p>Videodropper is powered by <a href="http://python.org">Python</a>, <a href="http://flask.pocoo.org">Flask</a>, <a href="http://redis.io">Redis</a> and <a href="http://celeryproject.org">Celery</a>. It is hosted on <a href="http://ep.io">Epio</a>(as you might have guessed from the ep.io subdomain). All the downloading is handled by <a href="https://github.com/rg3/youtube-dl">youtube-dl</a> and of course, the uploading is done using the Dropbox API. 
 <br/><br/></p>
@@ -108,7 +109,7 @@
 	</article>
 </section>
 
-
+<script src = "http://reading-time.samrat.me/js/embed_rt.js" type="text/javascript"></script>
 
 <div class="mobile-nav">
   <span class="nav-btn" id="mobile-nav-btn">
