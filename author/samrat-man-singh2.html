@@ -214,6 +214,46 @@
 <p>Thank you :)</p>
 	</article>
 
+  <h3 class="date">August 31, 2012</h3>
+    <article>
+	<hgroup>
+	<h2><a href="blog/2012/08/how-to-add-reading-time-to-your-website-or-blog" title="Permalink to How to add Reading Time to your website or blog">How to add Reading Time to your website or blog</a></h2>
+	
+	</hgroup>
+	<p>A few days ago I released <a href="http://reading-time.samrat.me">Reading Time</a>, a small Noir web app that tells you how long it will take for you to read an online article. The front-facing web app is pretty simple to use- just copy the URL of an article, paste it into Reading Time and it'll tell you how long you'll probably need to read the article. </p>
+<p><a href="http://imgur.com/IITRk"><img src="http://i.imgur.com/IITRk.png?1" title="Reading Time" alt="" width='675px'/></a></p>
+<p>So, instead I'm going to go through how to embed Reading Time into your blog or website, so you can tell your readers how long they will take to read an article. The original inspiration for Reading Time was <a href="http://swizec.com">Swizec</a>'s blog post- <a href="http://swizec.com/blog/services-i-want-to-pay-for/swizec/5158">Services I want to pay for</a> which lists the idea as <strong>"Tell my users how long they are likely to take reading a story"</strong> so I had been working on an API along with the web app right from the beginning. </p>
+<h2>The API</h2>
+<p>The API is dead simple. Send a GET request to <code>http://reading-time.samrat.me/api</code> with just <code>url</code> as a parameter and you'll get a JSON message. If JSONP is required, send a <code>callback</code> argument too.</p>
+<p>The URL should look like this:</p>
+<div class="codehilite"><pre><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">reading</span><span class="o">-</span><span class="n">time</span><span class="p">.</span><span class="n">samrat</span><span class="p">.</span><span class="n">me</span><span class="o">/</span><span class="n">api</span>?<span class="n">url</span><span class="p">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">samrat</span><span class="p">.</span><span class="n">me</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span>2011<span class="o">/</span>08<span class="o">/</span><span class="n">newsblur</span><span class="o">-</span><span class="n">an</span><span class="o">-</span><span class="n">awesome</span><span class="o">-</span><span class="n">alternative</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">google</span><span class="o">-</span><span class="n">reader</span><span class="o">&amp;</span><span class="n">callback</span><span class="p">=</span>?
+</pre></div>
+
+
+<p>This is what the responses look like:</p>
+<div class="codehilite"><pre><span class="nv">$ </span>curl http://reading-time.samrat.me/api?url<span class="o">=</span>http://samrat.me/blog/2011/08/newsblur-an-awesome-alternative-to-google-reader&amp;callback<span class="o">=</span>?
+?<span class="o">({</span><span class="s2">&quot;minutes&quot;</span>:1.0160000324249268,<span class="s2">&quot;readable&quot;</span>:<span class="s2">&quot;1 minutes, 0 seconds&quot;</span><span class="o">})</span>
+
+<span class="nv">$ </span>curl http://reading-time.samrat.me/api?url<span class="o">=</span>http://samrat.me/blog/2011/08/newsblur-an-awesome-alternative-to-google-reader
+<span class="o">{</span><span class="s2">&quot;minutes&quot;</span>:1.0160000324249268,<span class="s2">&quot;readable&quot;</span>:<span class="s2">&quot;1 minutes, 0 seconds&quot;</span><span class="o">}</span>
+</pre></div>
+
+
+<h2>Embedding Reading Time</h2>
+<p>To embed Reading Time on this site, I'm using this short script that makes use of jQuery:</p>
+<div class="codehilite"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s2">&quot;http://www.reading-time.samrat.me/api?url=&quot;</span> <span class="o">+</span> <span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">+</span> <span class="s2">&quot;&amp;callback=?&quot;</span><span class="p">,</span>
+<span class="p">{},</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;div.rt_readable&quot;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;Reading Time: &quot;</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;div.rt_readable&quot;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">readable</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+
+<p>The script is also available at <a href="http://www.reading-time.samrat.me/js/embed_rt.js">http://www.reading-time.samrat.me/js/embed_rt.js</a>, so you can add it to your site by just adding a <code>&lt;script&gt;</code> pointing to that link. Note that you'll also need to add <a href="http://jquery.com">jQuery</a> to your site <em>before</em> this script.</p>
+<p>Now, all you need to do is add <code>&lt;div class='rt_readable'&gt; &lt;/div&gt;</code> where you want Reading Time to appear. And when the page loads, you should see the Reading Time of the page. </p>
+	</article>
+
   <h3 class="date">May 03, 2012</h3>
     <article>
 	<hgroup>
@@ -221,20 +261,6 @@
 	
 	</hgroup>
 	<p>I've been playing around with CoffeeScript lately and discovered a neat little tool that converts any JavaScript(and thus, Coffeescript) bookmarklet into a Chrome extension- <a href="http://sandbox.self.li/bookmarklet-to-extension/">check it out</a>.</p>
-	</article>
-
-  <h3 class="date">August 30, 2011</h3>
-    <article>
-	<hgroup>
-	<h2><a href="blog/2011/08/innovating-in-a-developing-nation" title="Permalink to Innovating in a developing nation">Innovating in a developing nation</a></h2>
-	
-	</hgroup>
-	<p>Innovation is really hard to find in a developing nation. Innovation requires taking risks because when you’re innovating you are, by definition, doing things in a way that is unconventional. And taking risks in a developing nation is hard. Firstly because in a developing country the people’s first priority is to achieve financial security. Thus, many end up getting a safe job with a large corporation than risking their money by starting an enterprise. However, although that may lead to a secure future, it definitely doesn’t lead to prosperity, both for the individual and the nation. </p>
-<p>So, how can a developing nation cultivate a culture of innovation? Now, I know that a lot of people will say that the government should improve its policies to become more entrepreneur-friendly. Yes, in most developing nations governmental policies and governments can become huge setbacks to entrepreneurship; in fact, that’s probably the reason why they are developing nations in the first place. But what we must realize is that governmental policies are unlikely to change anytime soon. So whatever can be done has to be from our side. </p>
-<p>The answer, in my opinion, to improve the startup scene in any nation is to <em>start small</em>. Entrepreneurs and innovators need to learn how to start small and make the best of the resources they have available. This is actually quite easy for web startups these days, as so much software is available for free online. Also, services like Amazon EC2 make it extremely cheap to create websites that can scale in response to the popularity it gains. </p>
-<p><em>Bootstrapping</em> is a word that has caught on a lot recently, and not without good reason. Traditionally, the way to start a business was to raise a lot of capital and then start making and selling your stuff. Bootstrapping, on the other hand, means starting with very little cash and then turning those small investments into a profit. That’s the way a lot of today’s big companies like Apple, Google and Facebook did it. (Of course, they all raised money later from investors so that they could grow even larger.) </p>
-<p>However, the most important part of innovating or starting a business is <em>solving problems</em>- actual problems. A lot of web startups these days solve what have properly been coined the name first world problems and they aren’t really problems, at least not compared to the third world problems. Now, if you want your creation to survive in a poor developing nation, then your creation better be good. One good example of a company solving an actual problem is <a href="http://harilo.com" title="Harilo">Harilo</a>. People in Nepal can’t order from stores like Amazon.com so the guys at Harilo created a service which allowed them to. It may not be a totally new idea(I’ve seen another Indian website offering a similar service) but its opened up a whole new world of online shopping in Nepal. </p>
-<p>Innovation is something citizens of developing nations must indulge in- it’s the only way we’ll be able to move forward. We are already part of the wonderful world the Internet has made possible and now is the best time to join the league of people whose beautiful creations shape this world. </p>
 	</article>
 
 
