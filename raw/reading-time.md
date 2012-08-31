@@ -1,6 +1,6 @@
 Title: How to add Reading Time to your website or blog
 Date: 2012-08-31 9:00
-tags: programming, projects, api,
+tags: programming, projects, api
 
 A few days ago I released [Reading Time][rt], a small Noir web app that tells you how long it will take for you to read an online article. The front-facing web app is pretty simple to use- just copy the URL of an article, paste it into Reading Time and it'll tell you how long you'll probably need to read the article. 
 
