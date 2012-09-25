@@ -1,6 +1,7 @@
 Title: Books I've Read
 slug: books
 
+- **Flipped** by Wendelin Van Draanen
 - **Sphere** by Michael Crichton
 - **The Girl Who Kicked the Hornet's Nest** by Stieg Larsson
 - **The Girl Who Played with Fire** by Stieg Larsson
