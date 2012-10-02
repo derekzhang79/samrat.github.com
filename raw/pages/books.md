@@ -13,13 +13,13 @@ slug: books
 - **Angels and Demons** by Dan Brown
 - **The Lost Symbol** by Dan Brown
 - **Deception Point** by Dan Brown
+- **Harry Potter and the Deathly Hallows** by J.K. Rowling
 - **Harry Potter and the Half-Blood Prince** by J.K. Rowling
 - **Harry Potter and the Order of the Phoenix** by J.K. Rowling
 - **Harry Potter and the Goblet of Fire** by J.K. Rowling
 - **Harry Potter and the Prisoner of Azkaban** by J.K. Rowling
-- **Harry Potter and the Sorcerer's Stone** by J.K. Rowling
-- **Harry Potter and the Deathly Hallows** by J.K. Rowling
 - **Harry Potter and the Chamber of Secrets** by J.K. Rowling
+- **Harry Potter and the Sorcerer's Stone** by J.K. Rowling
 - **Outliers: The Story of Success** by Malcolm Gladwell
 - **The Kite Runner** by Khaled Hosseini
 - **Five Point Someone: What Not to Do at IIT** by Chetan Bhagat
