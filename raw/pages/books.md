@@ -1,6 +1,7 @@
 Title: Books I've Read
 slug: books
 
+- **The Book Thief** by Markus Zusak
 - **Flipped** by Wendelin Van Draanen
 - **Sphere** by Michael Crichton
 - **The Girl Who Kicked the Hornet's Nest** by Stieg Larsson
