@@ -3,17 +3,16 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="description" content="Personal website and blog of Samrat Man Singh. Follow him at @samratmansingh" />
+  <meta name="description" content="Personal website and blog of Samrat Man Singh. Follow him at @samratmansing" />
   <meta name="keywords" content="Samrat Man Singh, python, flask, computers, technology, nepal" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How to add Reading Time to your website or blog | Samrat Man Singh</title>
+  <title>How to add Reading Time to your website or blog | SITENAME</title>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <link rel="stylesheet" href="http://samrat.me/theme/css/styles.min.css" type="text/css" media="screen, projection">
-  <link rel="stylesheet" href="http://samrat.me/theme/css/pygments.css" type="text/css" media="screen">
-  <script src = "http://code.jquery.com/jquery-1.8.0.min.js"></script>
 
-  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/SamratDotMe" />
+  <link rel="alternate" type="application/rss+xml" title="RSS"
+  href="http://feeds.feedburner.com/SamratDotMe" />
   
 </head>
 
@@ -24,21 +23,24 @@
       <a href="http://samrat.me" rel="home"></a>
     </div>
     <h1>Samrat Man Singh</h1>
-    <h2>18 year-old from Nepal interested in computers and technology.</h2>
+    <h2>18 year-old from Nepal interested in computers and technology</h2>
   </hgroup>
   <nav>
     <ul class="main-nav">
       <li><a href="http://samrat.me" id="home-link">Home</a></li>
-      <li><a href="http://samrat.me/projects" id="home-link">Projects</a></li>
+	  
+		<li><a href="/projects" id="twitter-link">Projects</a></li>
 	  
 		<li><a href="http://twitter.com/samratmansingh" id="twitter-link">Twitter</a></li>
 	  
 		<li><a href="http://github.com/samrat" id="twitter-link">Github</a></li>
 	  
+		<li><a href="mailto:samrat@samrat.me" id="twitter-link">Contact</a></li>
+	  
 	  <li><a href="http://feeds.feedburner.com/SamratDotMe" id="github-link">Feed</a></li>
-      <li><a href="mailto:samrat@samrat.me?subject=Hello" id="contact-link">Contact</a></li>
-      </ul>
+      
   </nav>
+  <a href="http://pelican.notmyidea.org" class="fork-me">Powered by Pelican.</a>
 
 </header>
 
@@ -49,7 +51,6 @@
 	
 	<h2><a href="http://samrat.me/blog/2012/08/how-to-add-reading-time-to-your-website-or-blog">How to add Reading Time to your website or blog</a></h2>
 	</hgroup>
-	<div class="rt_readable"> </div>
 	<p>A few days ago I released <a href="http://reading-time.samrat.me">Reading Time</a>, a small Noir web app that tells you how long it will take for you to read an online article. The front-facing web app is pretty simple to use- just copy the URL of an article, paste it into Reading Time and it'll tell you how long you'll probably need to read the article. </p>
 <p><a href="http://imgur.com/IITRk"><img src="http://i.imgur.com/IITRk.png?1" title="Reading Time" alt="" width='675px'/></a></p>
 <p>So, instead I'm going to go through how to embed Reading Time into your blog or website, so you can tell your readers how long they will take to read an article. The original inspiration for Reading Time was <a href="http://swizec.com">Swizec</a>'s blog post- <a href="http://swizec.com/blog/services-i-want-to-pay-for/swizec/5158">Services I want to pay for</a> which lists the idea as <strong>"Tell my users how long they are likely to take reading a story"</strong> so I had been working on an API along with the web app right from the beginning. </p>
@@ -84,7 +85,7 @@
 <p>Now, all you need to do is add <code>&lt;div class='rt_readable'&gt; &lt;/div&gt;</code> where you want Reading Time to appear. And when the page loads, you should see the Reading Time of the page. </p>
 
 	<p>
-	If you liked this post, you should <a href="http://twitter.com/samratmansingh">follow me on Twitter.</a>
+	If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter.</a>
 	</p>
 	
 <a href="https://twitter.com/share" class="twitter-share-button" data-via="samratmansingh" data-size="large" data-count="none">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -96,11 +97,11 @@
 	<h3>Related posts</h3>
         <ul>
         
-		<li><a href="blog/2012/07/help-me-buy-a-domain-name">Help me buy a domain name</a></li>
+		<li><a href="blog/2011/08/newsblur-an-awesome-alternative-to-google-reader">Newsblur, an awesome alternative to Google Reader</a></li>
         
-		<li><a href="blog/2011/10/videodropper">Videodropper</a></li>
+		<li><a href="blog/2011/08/newsblur-an-awesome-alternative-to-google-reader">Newsblur, an awesome alternative to Google Reader</a></li>
         
-		<li><a href="blog/2012/06/every-minute-of-the-day">Every minute of the day...</a></li>
+		<li><a href="blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box">A first look at provisioning with Puppet(on a Vagrant box)</a></li>
         
         </ul>
     
@@ -127,7 +128,7 @@
 	</article>
 </section>
 
-<script src = "http://reading-time.samrat.me/js/embed_rt.js" type="text/javascript"></script>
+
 
 <div class="mobile-nav">
   <span class="nav-btn" id="mobile-nav-btn">
@@ -135,8 +136,9 @@
     <span class="nav-btn-bar"></span>
     <span class="nav-btn-bar"></span>
   </span>
-  <h3><a href="/">samrat.me</a></h3>
+  <h3><a href="/">http://samrat.me</a></h3>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript">
 /*<![CDATA[*/
 var twitter_integration_enabled = true,
