@@ -1,6 +1,6 @@
 from pelican.plugins import related_posts
 
-SITEURL = '/home/samrat/code/samrat.github.com'
+SITEURL = 'http://samrat.me'
 ABOUT = '18 year-old from Nepal interested in computers and technology'
 
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{slug}'
