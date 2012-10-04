@@ -4,498 +4,498 @@
          xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/index.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/index.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/archives.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/archives.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tags.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tags.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/categories.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/categories.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/about</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/about</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/books</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/books</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/projects</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/projects</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/09/reading-packet</loc>
+    <loc>http://samrat.me/blog/2012/09/reading-packet</loc>
     <lastmod>2012-09-03T11:50:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/08/how-to-add-reading-time-to-your-website-or-blog</loc>
+    <loc>http://samrat.me/blog/2012/08/how-to-add-reading-time-to-your-website-or-blog</loc>
     <lastmod>2012-08-31T09:00:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/08/extracting-feed-articles-in-clojure</loc>
+    <loc>http://samrat.me/blog/2012/08/extracting-feed-articles-in-clojure</loc>
     <lastmod>2012-08-21T21:10:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/08/an-ide-as-a-packaged-chrome-app</loc>
+    <loc>http://samrat.me/blog/2012/08/an-ide-as-a-packaged-chrome-app</loc>
     <lastmod>2012-08-05T00:00:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/07/help-me-buy-a-domain-name</loc>
+    <loc>http://samrat.me/blog/2012/07/help-me-buy-a-domain-name</loc>
     <lastmod>2012-07-07T00:00:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/06/googles-answer-to-siri-now</loc>
+    <loc>http://samrat.me/blog/2012/06/googles-answer-to-siri-now</loc>
     <lastmod>2012-06-28T00:00:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/06/every-minute-of-the-day</loc>
+    <loc>http://samrat.me/blog/2012/06/every-minute-of-the-day</loc>
     <lastmod>2012-06-23T12:05:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box</loc>
+    <loc>http://samrat.me/blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box</loc>
     <lastmod>2012-06-04T00:00:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box</loc>
+    <loc>http://samrat.me/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box</loc>
     <lastmod>2012-05-27T00:00:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/05/how-to-convert-a-bookmarklet-into-a-chrome-extension</loc>
+    <loc>http://samrat.me/blog/2012/05/how-to-convert-a-bookmarklet-into-a-chrome-extension</loc>
     <lastmod>2012-05-03T18:16:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/05/would-you-want-to-be-on-svbtle</loc>
+    <loc>http://samrat.me/blog/2012/05/would-you-want-to-be-on-svbtle</loc>
     <lastmod>2012-05-03T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2012/03/the-internet-first-impressions</loc>
+    <loc>http://samrat.me/blog/2012/03/the-internet-first-impressions</loc>
     <lastmod>2012-03-20T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/10/the-intersection-between-biology-and-technology</loc>
+    <loc>http://samrat.me/blog/2011/10/the-intersection-between-biology-and-technology</loc>
     <lastmod>2011-10-29T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/10/videodropper-behind-the-scenes</loc>
+    <loc>http://samrat.me/blog/2011/10/videodropper-behind-the-scenes</loc>
     <lastmod>2011-10-21T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/10/videodropper</loc>
+    <loc>http://samrat.me/blog/2011/10/videodropper</loc>
     <lastmod>2011-10-20T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/10/a-world-without-lego</loc>
+    <loc>http://samrat.me/blog/2011/10/a-world-without-lego</loc>
     <lastmod>2011-10-14T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/10/the-gamification-of-games</loc>
+    <loc>http://samrat.me/blog/2011/10/the-gamification-of-games</loc>
     <lastmod>2011-10-13T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/09/instamator-is-now-open-source</loc>
+    <loc>http://samrat.me/blog/2011/09/instamator-is-now-open-source</loc>
     <lastmod>2011-09-14T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/09/instamator</loc>
+    <loc>http://samrat.me/blog/2011/09/instamator</loc>
     <lastmod>2011-09-08T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/09/theres-already-a-website-for-that</loc>
+    <loc>http://samrat.me/blog/2011/09/theres-already-a-website-for-that</loc>
     <lastmod>2011-09-02T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/08/innovating-in-a-developing-nation</loc>
+    <loc>http://samrat.me/blog/2011/08/innovating-in-a-developing-nation</loc>
     <lastmod>2011-08-30T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/blog/2011/08/newsblur-an-awesome-alternative-to-google-reader</loc>
+    <loc>http://samrat.me/blog/2011/08/newsblur-an-awesome-alternative-to-google-reader</loc>
     <lastmod>2011-08-07T18:15:00-00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/category/misc.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/category/misc.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/google.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/google.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/apple.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/apple.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/api.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/api.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/programming.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/programming.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/awesome.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/awesome.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/history.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/history.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/development-environment.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/development-environment.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/puppet.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/puppet.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/instamator.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/instamator.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/technology.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/technology.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/cloud.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/cloud.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/instagram.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/instagram.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/noir.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/noir.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/chrome.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/chrome.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/webapps.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/webapps.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/vagrant.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/vagrant.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/ideas.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/ideas.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/thats.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/thats.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/innovation.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/innovation.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/reading.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/reading.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/biology.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/biology.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/gunicorn.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/gunicorn.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/open-source.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/open-source.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/kickstarter.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/kickstarter.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/internet.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/internet.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/miscellaneous.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/miscellaneous.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/entrepreneurship.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/entrepreneurship.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/nginx.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/nginx.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/deployment.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/deployment.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/dropbox.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/dropbox.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/web-apps.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/web-apps.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/projects.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/projects.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/bootstrapping.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/bootstrapping.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/youtube.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/youtube.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/reviews.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/reviews.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/flask.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/flask.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/domain-name.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/domain-name.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/algorithms.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/algorithms.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/clojure.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/clojure.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/tag/software.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/tag/software.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>/home/samrat/code/samrat.github.com/author/samrat-man-singh.html</loc>
-    <lastmod>2012-10-04T22:12:24-00:00</lastmod>
+    <loc>http://samrat.me/author/samrat-man-singh.html</loc>
+    <lastmod>2012-10-04T22:32:34-00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
