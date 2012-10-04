@@ -1,4 +1,4 @@
-Title: Books I've Read
+Title: Books
 slug: books
 
 - **The Book Thief** by Markus Zusak
@@ -32,12 +32,12 @@ slug: books
 - **The Count of Monte Cristo** by Alexandre Dumas
 - **The Business of Dying** by Simon Kernick
 - **The Testament** by John Grisham
-- **The Facebook Effect: The Inside Story of the Company That is Connecting the World** by David Kirkpatrick
+- **The Facebook Effect** by David Kirkpatrick
 - **Revolution 2020: Love, Corruption, Ambition** by Chetan Bhagat
 - **The Street Lawyer** by John Grisham
 - **The Alchemist** by Paulo Coelho
 - **Steve Jobs** by Walter Isaacson
-- **Who Moved My Cheese?: An A-Mazing Way to Deal with Change in Your Work and in Your Life** by Spencer Johnson
+- **Who Moved My Cheese?** by Spencer Johnson
 - **100 Years of Solitude** by Gabriel Garcí­a Márquez
 - **The Da Vinci Code** by Dan Brown
 - **Digital Fortress** by Dan Brown

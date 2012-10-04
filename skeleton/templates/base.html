@@ -8,9 +8,10 @@
 	<!-- Basic Page Needs
   ================================================== -->
 	<meta charset="utf-8">
-	<title>{{SITENAME}}</title>
-	<meta name="description" content="Skeleton: Beautiful Boilerplate for Responsive, Mobile-Friendly Development">
-	<meta name="author" content="Dave Gamache">
+        <title>{% block title %}{% endblock %}</title>
+	<meta name="description" content="Personal weblog/site of
+                                          Samrat Man Singh">
+	<meta name="author" content="Samrat Man Singh">
 	<meta property="twitter:account_id" content="17346623" />
 	
 	<!--[if lt IE 9]>
@@ -30,7 +31,7 @@
 
 	<!-- Favicon
 	================================================== -->
-	<link rel="shortcut icon" href="src/images/favicon.ico">
+	<link rel="shortcut icon" href="favicon.ico">
 	<link rel="apple-touch-icon" sizes="57x57" href="src/images/apple-touch-icon.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="src/images/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="src/images/apple-touch-icon-114x114.png">
@@ -50,7 +51,8 @@
           <li><a href="http://github.com/samrat">Github</a></li>
           <li><a href="http://twitter.com/samratmansingh">Twitter</a></li>
           <li><a href="mailto:samrat@samrat.me">Email</a></li>
-          <li><a href="http://feeds.feedburner.com/samratdotme">Feed</a></li>
+          <li><a href="http://feeds.feedburner.com/samratdotme">Feed</a>
+          </li>
         </ul>
       </div>
       <hr class = "large"/>
@@ -58,11 +60,13 @@
 
     <div class="container">
       
-        <section id ="content">
+        <section id="content">
           {% block content %}{% endblock %}
         </section>
-        
    <hr /> 
     </div>
+    
+<!-- Google Analytics -->
+    {% include "analytics.html" %}
 </body>
                                           

@@ -1,6 +1,6 @@
 from pelican.plugins import related_posts
 
-SITEURL = 'http://samrat.me'
+SITEURL = '/home/samrat/code/samrat.github.com'
 ABOUT = '18 year-old from Nepal interested in computers and technology'
 
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{slug}'
@@ -12,7 +12,20 @@ PAGE_SAVE_AS = '{slug}/index.html'
 META_DESCRIPTION = "Personal website and blog of Samrat Man Singh. Follow him at @samratmansing"
 META_KEYWORDS = "Samrat Man Singh, python, flask, computers, technology, nepal"
 
-PLUGINS = [related_posts]
+PLUGINS = [related_posts, 'pelican.plugins.sitemap']
+SITEMAP = {
+    'format': 'xml',
+    'priorities': {
+        'articles': 0.5,
+        'indexes': 0.5,
+        'pages': 0.5
+    },
+    'changefreqs': {
+        'articles': 'monthly',
+        'indexes': 'daily',
+        'pages': 'monthly'
+    }
+}
 
 AUTHOR = 'Samrat Man Singh'
 
@@ -43,11 +56,11 @@ SOCIAL = (('Projects', '/projects'),
           ('Github', 'http://github.com/samrat'),
           ('Contact', 'mailto:samrat@samrat.me'),)
 
-ARTICLE_FOOTER = "If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter.</a>"
+ARTICLE_FOOTER = "If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter</a> or <a href='http://feeds.feedburner.com/samratdotme'>subscribe to this blog</a>."
 
 TIMEZONE = "Asia/Kathmandu"
 
-THEME = '/home/samrat/code/syte-pelican'
+THEME = './skeleton'
 MEDIA_URL = 'theme/'
 TWITTER_INTEGRATION_ENABLED = True
 GITHUB_INTEGRATION_ENABLED = True
