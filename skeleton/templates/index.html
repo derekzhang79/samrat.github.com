@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="ten columns">
+  <h3 id="entry-title">Blog</h3>
+{% for article in articles%}
+	<h4 class="article-title"><a href="{{article.url}}" title="Permalink to {{article.title}}">{{article.title}}</a></h3>
+	
+  <div>{{article.locale_date}}</div><br/>
+{% endfor %}
+</div>
+{% endblock %}

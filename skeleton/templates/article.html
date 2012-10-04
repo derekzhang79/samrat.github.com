@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="fourteen columns" id="no-bg">
+	<h3 class="entry-title"><a href="{{article.url}}" title="Permalink to {{article.title}}">{{article.title}}</a></h3>
+	
+  <div class="entry-meta">{{article.locale_date}}</div>
+  <br/>
+        
+	<div id="entry-content">
+          {{article.content}}
+          </div>
+        </div>
+{% endblock %}
