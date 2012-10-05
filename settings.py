@@ -13,6 +13,7 @@ META_DESCRIPTION = "Personal website and blog of Samrat Man Singh. Follow him at
 META_KEYWORDS = "Samrat Man Singh, python, flask, computers, technology, nepal"
 
 PLUGINS = [related_posts, 'pelican.plugins.sitemap']
+MAX_RELATED_POSTS = 3
 SITEMAP = {
     'format': 'xml',
     'priorities': {
