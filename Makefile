@@ -1,5 +1,4 @@
 build:
 	pelican -s settings.py raw
-upload:
-	build
+upload: build
 	git push origin master
