@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+        <title>Fighting an N-headed monster with recursion | Samrat Man Singh</title>
+	<meta name="description" content="Personal weblog/site of
+                                          Samrat Man Singh">
+	<meta name="author" content="Samrat Man Singh">
+	<meta property="twitter:account_id" content="17346623" />
+	
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="http://samrat.me/theme/stylesheets/base.css">
+	<link rel="stylesheet" href="http://samrat.me/theme/stylesheets/skeleton.css">
+	<link rel="stylesheet" href="http://samrat.me/theme/stylesheets/layout.css">
+	<link rel="stylesheet" href="documentation-assets/docs.css">
+
+	<!-- Favicon
+	================================================== -->
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="apple-touch-icon" sizes="57x57" href="src/images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="src/images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="src/images/apple-touch-icon-114x114.png">
+
+</head>
+  <body>
+    <div class="container">
+      <hr id="page-top"/>
+      <header>
+        <a href="http://samrat.me">
+          <h1 class="site-title">Samrat Man Singh</h1></a>
+        18-year old from Nepal interested in computers and technology.
+      </header>
+      <div id="nav">
+        <ul>
+          <li><a href="http://samrat.me">Home</a></li>
+          <li><a href="http://github.com/samrat">Github</a></li>
+          <li><a href="http://twitter.com/samratmansingh">Twitter</a></li>
+          <li><a href="mailto:samrat@samrat.me">Email</a></li>
+          <li><a href="http://feeds.feedburner.com/samratdotme">Feed</a>
+          </li>
+        </ul>
+      </div>
+      <hr class = "large"/>
+    </div>
+
+    <div class="container">
+      
+        <section id="content">
+          
+<div class="fourteen columns" id="no-bg">
+	<h3 class="entry-title"><a href="blog/2012/10/fighting-an-n-headed-monster-with-recursion" title="Permalink to Fighting an N-headed monster with recursion">Fighting an N-headed monster with recursion</a></h3>
+	
+        <div id="tweet"><a href="https://twitter.com/share" class="twitter-share-button" data-related="samratmansingh" data-count="none">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+        <div id="entrymeta">October 07, 2012</div>
+
+  <br/>
+	<div class="entry-content">
+          <p>A while back, I came upon this problem:</p>
+<blockquote>
+<p>"You need to kill an N-headed monster. To do that, you have two swords. The first sword(A) cuts <code>cutA</code> heads, however, in case the monster doesn't die(ie <code>no. of heads &gt; 0</code>), it will grow <code>growA</code> heads. The second sword works the same way, except that it'll cut <code>cutB</code> heads and in case the monster is still alive, it'll grow <code>growB</code> heads. If a sword is used to result in the no. of monster heads being less than 0, you die."</p>
+<p>The problem is to find the shortest combination of swords that can be used to kill the monster(without killing yourself).</p>
+</blockquote>
+<p>This is a paraphrase of the original question(so the question might have sounded a bit awkward). Here's my solution to it, in Scheme(Racket):</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="k">define </span><span class="nv">cutA</span> <span class="mi">7</span><span class="p">)</span>
+<span class="p">(</span><span class="k">define </span><span class="nv">growA</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">(</span><span class="k">define </span><span class="nv">cutB</span> <span class="mi">5</span><span class="p">)</span>
+<span class="p">(</span><span class="k">define </span><span class="nv">growB</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">attack-monster</span> <span class="nv">heads</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">use-sword</span> <span class="nv">heads</span> <span class="mi">0</span> <span class="o">&#39;</span><span class="p">()))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">use-sword</span> <span class="nv">n</span> <span class="nv">grow</span> <span class="nv">s</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">&lt; </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">())</span>
+    <span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+     <span class="p">(</span><span class="nb">list </span><span class="nv">s</span><span class="p">))</span>
+    <span class="p">(</span><span class="nf">else</span>
+     <span class="p">(</span><span class="nf">append</span>
+      <span class="p">(</span><span class="nf">use-sword</span>
+       <span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nb">+ </span><span class="nv">n</span> <span class="nv">grow</span><span class="p">)</span> <span class="nv">cutA</span><span class="p">)</span>
+       <span class="nv">growA</span>
+       <span class="p">(</span><span class="nb">append </span><span class="nv">s</span> <span class="p">(</span><span class="nb">list </span><span class="ss">&#39;a</span><span class="p">)))</span>
+      <span class="p">(</span><span class="nf">use-sword</span>
+       <span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nb">+ </span><span class="nv">n</span> <span class="nv">grow</span><span class="p">)</span> <span class="nv">cutB</span><span class="p">)</span>
+       <span class="nv">growB</span>
+       <span class="p">(</span><span class="nb">append </span><span class="nv">s</span> <span class="p">(</span><span class="nb">list </span><span class="ss">&#39;b</span><span class="p">)))))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">shortest-way</span> <span class="nv">heads</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">first</span> <span class="p">(</span><span class="nf">sort</span> <span class="p">(</span><span class="nf">attack-monster</span> <span class="nv">heads</span><span class="p">)</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span> <span class="nv">y</span><span class="p">)</span> <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">length </span><span class="nv">y</span><span class="p">))))))</span>
+</pre></div>
+
+
+<p>Here's how to use it:</p>
+<div class="codehilite"><pre><span class="nv">&gt;</span> <span class="p">(</span><span class="nf">shortest-way</span> <span class="mi">23</span><span class="p">)</span>
+<span class="o">&#39;</span><span class="p">(</span><span class="nv">a</span> <span class="nv">a</span> <span class="nv">a</span> <span class="nv">a</span> <span class="nv">a</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Thanks to <a href="http://www.reddit.com/user/skeeto">skeeto</a> on <a href="http://www.reddit.com/r/scheme/comments/10zc9x/finding_shortest_link_from_within_a_recursive/">Reddit</a> for helping me out with this, and more importantly for <strong>not</strong> showing me his code :)</p>
+<p>Also, I'd love to see how you guys do this in a more efficient and more elegant ways.</p>
+
+          <p id="footer-message">If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter</a> or <a href='http://feeds.feedburner.com/samratdotme'>subscribe to this blog</a>.</p>
+
+          
+          <div id="related-posts">
+            <h4>Related Posts</h4>
+            <ul>
+              
+              <li><a href="/blog/2012/08/extracting-feed-articles-in-clojure">Extracting feed articles in Clojure</a></li>
+              
+              <li><a href="/blog/2012/08/how-to-add-reading-time-to-your-website-or-blog">How to add Reading Time to your website or blog</a></li>
+              
+            </ul>
+            <br/>
+          </div>
+          
+          
+          <div><a href="http://samrat.me">← Back to Home</a></div>
+          <br/>
+          </div>
+        </div>
+
+        </section>
+   <hr /> 
+    </div>
+    
+<!-- Google Analytics -->
+    
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-18986645-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+
+</body>
+                                          
