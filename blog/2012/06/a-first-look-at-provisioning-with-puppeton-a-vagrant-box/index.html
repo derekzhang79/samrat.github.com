@@ -62,14 +62,14 @@
 
         <section id="content">
           
-<div class="fourteen columns" id="no-bg">
-	<h3 class="entry-title"><a href="blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box" title="Permalink to A first look at provisioning with Puppet(on a Vagrant box)">A first look at provisioning with Puppet(on a Vagrant box)</a></h3>
-	
+<div class="fourteen columns">
+        <h3 class="entry-title"><a href="blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box" title="Permalink to A first look at provisioning with Puppet(on a Vagrant box)">A first look at provisioning with Puppet(on a Vagrant box)</a></h3>
+
         <div id="tweet"><a href="https://twitter.com/share" class="twitter-share-button" data-related="samratmansingh" data-count="none">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
         <div id="entrymeta">June 04, 2012</div>
 
   <br/>
-	<div class="entry-content">
+        <div class="entry-content">
           <p>In my <a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/">previous post</a>, I talked about deploying a Flask app on a Vagrant box using Gunicorn and Nginx. The response I got was mind-blowing, so I've decided to write about another neat tool that's awesome for deploying web apps- Puppet. <a href="http://vagrantup.com">Vagrant</a> actually encourages its users to use it, and you should use it. <strong>There's also an alternative to Puppet called <a href="http://www.opscode.com/chef/">Chef</a>; some people prefer that over Puppet, so you might want to check it out.</strong></p>
 <p>Hopefully I'll be able to demonstrate what Puppet does and why its awesome in this post. But please note that this isn't meant as a comprehensive tutorial, you should check out Puppet's <a href="http://docs.puppetlabs.com/">docs</a> for that. Also even though the Puppet docs asks you to get the Learning Puppet VM, I found it much more comfortable to use <code>vagrant ssh</code> for learning Puppet, so if you already have Vagraant installed, you might want to try that out too- just try running <code>puppet</code> inside the virtual machine. </p>
 <p>What Puppet does is something called <em>provisioning</em>- that means that it <em><a href="http://www.youtube.com/watch?v=bP8Mtiuc8XM">makes computers do what they are supposed to do</a></em>. In other words, it does the configuring for you. To understand what that means, let's see it in action.</p>
@@ -145,7 +145,7 @@
             <br/>
           </div>
           
-          
+
           <div><a href="http://samrat.me">← Back to Home</a></div>
           <br/>
           </div>
