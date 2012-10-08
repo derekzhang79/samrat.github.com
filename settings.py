@@ -57,7 +57,7 @@ SOCIAL = (('Projects', '/projects'),
           ('Github', 'http://github.com/samrat'),
           ('Contact', 'mailto:samrat@samrat.me'),)
 
-ARTICLE_FOOTER = "If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter</a> or <a href='http://feeds.feedburner.com/samratdotme'>subscribe to this blog</a>."
+ARTICLE_FOOTER = "If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter</a> or <a href='http://samrat.github.com/feeds/all.xml'>subscribe to this blog</a>."
 
 TIMEZONE = "Asia/Kathmandu"
 
