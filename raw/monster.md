@@ -21,12 +21,12 @@ This is a paraphrase of the original question(so the question might have sounded
 
     (define (use-sword n grow s)
       (cond ((< n 0) '())
-        ((= n 0)
-         (list s))
-        (else
-         (append
-          (use-sword (- (+ n grow) cutA) growA (append s (list 'a)))
-          (use-sword (- (+ n grow) cutB) growB (append s (list 'b)))))))
+             ((= n 0)
+              (list s))
+             (else
+              (append
+               (use-sword (- (+ n grow) cutA) growA (append s (list 'a)))
+               (use-sword (- (+ n grow) cutB) growB (append s (list 'b)))))))
 
     (define (shortest-way heads)
       (first (sort (attack-monster heads) (lambda (x y) (< (length x) (length y))))))

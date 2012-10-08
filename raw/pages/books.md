@@ -1,12 +1,19 @@
 Title: Books
 slug: books
 
+Books I've read:
+
 - **The Book Thief** by Markus Zusak
 - **Flipped** by Wendelin Van Draanen
 - **Sphere** by Michael Crichton
 - **The Girl Who Kicked the Hornet's Nest** by Stieg Larsson
 - **The Girl Who Played with Fire** by Stieg Larsson
 - **The Girl With the Dragon Tattoo** by Stieg Larsson
+- **E=mc²: A Biography of the World's Most Famous Equation** by David Bodanis
+- **The Art of Learning** by Josh Waitzkin
+- **Learn to Earn** by Peter Lynch
+- **Rich Dad, Poor Dad** by Robert Kiyosaki
+- **The Google Story** by David A. Vise and Mark Malseed
 - **Hackers and Painters: Big Ideas from the Computer Age** by Paul Graham
 - **The Fellowship of the Ring** by J.R.R. Tolkien
 - **The Two Towers** by J.R.R. Tolkien
@@ -26,6 +33,8 @@ slug: books
 - **Five Point Someone: What Not to Do at IIT** by Chetan Bhagat
 - **2 States: The Story of My Marriage** by Chetan Bhagat
 - **The 3 Mistakes of My Life** by Chetan Bhagat
+- **In The Mind of the Machine** by Kevin Warwick
+- **Jack: Straight from the Gut** by Jack Welch
 - **Congo** by Michael Crichton
 - **The Kite Runner & A Thousand Splendid Suns** by Khaled Hosseini
 - **Palpasa Cafe** by Narayan Wagle
@@ -35,6 +44,7 @@ slug: books
 - **The Facebook Effect** by David Kirkpatrick
 - **Revolution 2020: Love, Corruption, Ambition** by Chetan Bhagat
 - **The Street Lawyer** by John Grisham
+- **Veronica Decides to Die** by Paulo Coelho
 - **The Alchemist** by Paulo Coelho
 - **Steve Jobs** by Walter Isaacson
 - **Who Moved My Cheese?** by Spencer Johnson
@@ -43,11 +53,15 @@ slug: books
 - **Digital Fortress** by Dan Brown
 - **Surely You're Joking, Mr. Feynman!** by Richard P. Feynman
 - **The Notebook** by Nicholas Sparks
+- **The Eleventh Commandment** by Jeffrey Archer
+- **Honour Among Thieves** by Jeffrey Archer
 - **Kane and Abel** by Jeffrey Archer
 - **Darkly Dreaming Dexter** by Jeff Lindsay
 - **Brisingr** by Christopher Paolini
 - **Eldest** by Christopher Paolini
 - **Eragon** by Christopher Paolini
+- **Arresting God in Kathmandu** by Samrat Upadhyay
+- **The Royal Ghosts** by Samrat Upadhyay
 - **The Five People You Meet in Heaven** by Mitch Albom
 - **Have a Little Faith: The Story of a Last Request** by Mitch Albom
 - **Tuesdays with Morrie** by Mitch Albom
