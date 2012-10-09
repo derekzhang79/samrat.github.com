@@ -4,6 +4,7 @@ slug: books
 Books I've read:
 
 - **The Book Thief** by Markus Zusak
+- **Into the Wild** by Jon Krakauer
 - **Flipped** by Wendelin Van Draanen
 - **Sphere** by Michael Crichton
 - **The Girl Who Kicked the Hornet's Nest** by Stieg Larsson
@@ -29,6 +30,7 @@ Books I've read:
 - **Harry Potter and the Chamber of Secrets** by J.K. Rowling
 - **Harry Potter and the Sorcerer's Stone** by J.K. Rowling
 - **Outliers: The Story of Success** by Malcolm Gladwell
+- **The Accidental Billionaires** by Ben Mezrich
 - **The Kite Runner** by Khaled Hosseini
 - **Five Point Someone: What Not to Do at IIT** by Chetan Bhagat
 - **2 States: The Story of My Marriage** by Chetan Bhagat

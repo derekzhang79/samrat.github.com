@@ -187,144 +187,163 @@
 
 
 &lt;p&gt;Run &lt;code&gt;vagrant reload&lt;/code&gt; and you're done with the &lt;code&gt;nginx&lt;/code&gt; configuration. Besides removing the repetitiveness for you, Puppet is also wonderful when you're working on a team or on an open-source project. Now, all you need to do is write the manifests and once you share them you can rest assured that the entire team has the exact same environment.&lt;br /&gt;
-&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Mon, 04 Jun 2012 00:00:00 +0545</pubDate><guid>tag:samrat.me,2012-06-04:blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box</guid><category>deployment</category><category>puppet</category><category>vagrant</category></item><item><title>Flask + Nginx + Gunicorn(on a Vagrant box)</title><link>http://samrat.me/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box</link><description>&lt;p&gt;&lt;strong&gt;Update-&lt;/strong&gt; &lt;em&gt;Since I(and many others on Hacker News) felt that I missed up on an important tool closely related to, and tightly embraced by Vagrant, I've written a follow-up to this post which covers Puppet- you can &lt;a href="http://samrat.github.com/blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box.html"&gt;find it here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;I had some difficulty in grasping how exactly to set up a server when I tried to do so recently, so I decided to write a tutorial that will guide you through the process. Hopefully, this post will help you avoid at least some of the confusion that I encountered.&lt;/p&gt;
-&lt;p&gt;We'll be using Nginx + Gunicorn to host a simple Flask app. Many of you may not have access to a server but don't worry, we'll use &lt;a href="http://vagrantup.com"&gt;Vagrant&lt;/a&gt;, which makes use of a VirtualBox VM to emulate a server. &lt;/p&gt;
+&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Mon, 04 Jun 2012 00:00:00 +0545</pubDate><guid>tag:samrat.me,2012-06-04:blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box</guid><category>deployment</category><category>puppet</category><category>vagrant</category></item><item><title>Flask + Nginx + Gunicorn(on a Vagrant box)</title><link>http://samrat.me/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box</link><description>&lt;p&gt;I had some difficulty in grasping how exactly to set up a server when I tried to do so recently, so I decided to write a tutorial that will guide you through the process. Hopefully, this post will help you avoid at least some of the confusion that I encountered.&lt;/p&gt;
+&lt;p&gt;We'll be using Nginx + Gunicorn to host a simple Flask app. Many of you may not have access to a server but don't worry, we'll use &lt;a href="http://vagrantup.com"&gt;Vagrant&lt;/a&gt;, which makes use of a VirtualBox VM to emulate a server.&lt;/p&gt;
 &lt;h2&gt;The Flask App&lt;/h2&gt;
 &lt;p&gt;Because this is a post about deployment more than development, we'll make the web app super-simple. If you're not familiar with Flask, please &lt;a href="http://flask.pocoo.org/"&gt;check it out&lt;/a&gt;, its awesome and really easy to learn. You'll also probably want to develop the app inside &lt;a href="http://pypi.python.org/pypi/virtualenv"&gt;virtualenv&lt;/a&gt;- it makes things a lot neater. Make a folder in your local machine(we're not working with the virtual-machine yet) for your app, I'll call it &lt;code&gt;codebase&lt;/code&gt;. Create two folders called &lt;code&gt;static&lt;/code&gt; and &lt;code&gt;templates&lt;/code&gt;, and a Python file called &lt;code&gt;app.py&lt;/code&gt;. &lt;code&gt;codebase&lt;/code&gt; should now look like this:&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;.&lt;/span&gt;
-├── &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;
-├── &lt;span class="n"&gt;static&lt;/span&gt;
-└── &lt;span class="n"&gt;templates&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="p"&gt;.&lt;/span&gt;
+    ├── &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;
+    ├── &lt;span class="n"&gt;static&lt;/span&gt;
+    └── &lt;span class="n"&gt;templates&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Now, open app.py with a text editor and add the following:&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;flask&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt;
+    &lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="n"&gt;flask&lt;/span&gt; &lt;span class="n"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;
 
-&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-&lt;span class="nd"&gt;@app.route&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;index&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Hello world!&amp;quot;&lt;/span&gt;
+    &lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;route&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &amp;quot;&lt;span class="n"&gt;Hello&lt;/span&gt; &lt;span class="n"&gt;world&lt;/span&gt;!&amp;quot;
 
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;At this point, if you run &lt;code&gt;app.py&lt;/code&gt; with &lt;code&gt;python app.py&lt;/code&gt;, you should be able to open http://localhost:5000/ and see a "Hello World!" printed. Now, freeze your requirements with &lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;freeze&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;requirements&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;txt&lt;/span&gt;
+&lt;p&gt;At this point, if you run &lt;code&gt;app.py&lt;/code&gt; with &lt;code&gt;python app.py&lt;/code&gt;, you should be able to open http://localhost:5000/ and see a "Hello World!" printed. Now, freeze your requirements with&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;freeze&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;requirements&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;txt&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Great, now we'll start working on the actual server. &lt;/p&gt;
+&lt;p&gt;Great, now we'll start working on the actual server.&lt;/p&gt;
 &lt;h2&gt;Vagrant&lt;/h2&gt;
 &lt;p&gt;As I said before, Vagrant allows you to work with server-like environments on your local machine. It's absolutely great. To get &lt;a href="http://vagrantup.com"&gt;Vagrant&lt;/a&gt; up and running:&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="c"&gt;# first install Virtualbox, then,&lt;/span&gt;
-&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;vagrant&lt;/span&gt;
-&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="nb"&gt;box&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;base&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;files&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vagrantup&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;precise32&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;box&lt;/span&gt;
-&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;
-&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;up&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    # &lt;span class="n"&gt;first&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;Virtualbox&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;then&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;vagrant&lt;/span&gt;
+    &lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;box&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;base&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;files&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vagrantup&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;precise32&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;box&lt;/span&gt;
+    &lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;
+    &lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;up&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;If nothing went wrong, you should now see a file called &lt;code&gt;Vagrantfile&lt;/code&gt; inside &lt;code&gt;codebase&lt;/code&gt;- that's Vagrant's configuration file. Open the file, we'll need to make a few changes to the file.&lt;/p&gt;
 &lt;p&gt;First, uncomment the line:&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;network&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;hostonly&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &amp;quot;192&lt;span class="p"&gt;.&lt;/span&gt;168&lt;span class="p"&gt;.&lt;/span&gt;33&lt;span class="p"&gt;.&lt;/span&gt;10&amp;quot;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;network&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;hostonly&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &amp;quot;192&lt;span class="p"&gt;.&lt;/span&gt;168&lt;span class="p"&gt;.&lt;/span&gt;33&lt;span class="p"&gt;.&lt;/span&gt;10&amp;quot;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;and change "192.168.33.10" to "33.33.33.33". This will enable the host-machine(that is your computer) to access the webserver running on the VM.&lt;/p&gt;
-&lt;p&gt;That way we should be able to access a web app running in the VM's &lt;code&gt;localhost&lt;/code&gt;, on our machine. &lt;/p&gt;
-&lt;p&gt;Because, we did a &lt;code&gt;vagrant up&lt;/code&gt; the Vagrant box should already be running. Now, run &lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;reload&lt;/span&gt;
+&lt;p&gt;That way we should be able to access a web app running in the VM's &lt;code&gt;localhost&lt;/code&gt;, on our machine.&lt;/p&gt;
+&lt;p&gt;Because, we did a &lt;code&gt;vagrant up&lt;/code&gt; the Vagrant box should already be running. Now, run&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;reload&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;so that the changes we made to the Vagrantfile take place.&lt;/p&gt;
 &lt;p&gt;After the VM restarts, run&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;This allows you to run commands into the VM. Once inside the VM, we'll need to get some things installed. Run &lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;nginx&lt;/span&gt;
-&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;virtualenv&lt;/span&gt;
+&lt;p&gt;This allows you to run commands into the VM. Once inside the VM, we'll need to get some things installed. Run&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;nginx&lt;/span&gt;
+    &lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;virtualenv&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Now let's create a folder inside the VM where we'll keep the application&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;
-&lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="n"&gt;www&lt;/span&gt;
-&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="n"&gt;www&lt;/span&gt;
-&lt;span class="n"&gt;virtualenv&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;no&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;packages&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
-&lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="n"&gt;codebase&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;
+    &lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="n"&gt;www&lt;/span&gt;
+    &lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="n"&gt;www&lt;/span&gt;
+    &lt;span class="n"&gt;virtualenv&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;no&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;packages&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
+    &lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="n"&gt;codebase&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;And let's grab the application from our local machine&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;cp&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;cp&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;em&gt;Note that while I used &lt;code&gt;cp&lt;/code&gt;, its always a better idea to use &lt;code&gt;git&lt;/code&gt; or some other version-control system. For more on that, I recommend that you read &lt;a href="http://thomas.pelletier.im/2011/04/git-django-deployment/"&gt;this post&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Then, activate the virtualenv we created.&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;
-&lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;activate&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;
+    &lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;activate&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Install gunicorn with &lt;code&gt;pip&lt;/code&gt;&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;gunicorn&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;gunicorn&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Also install the other Python dependencies your app has with&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="n"&gt;requirements&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;txt&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="n"&gt;requirements&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;txt&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;That will grab and install your app's required dependencies like Flask. &lt;/p&gt;
-&lt;p&gt;Now, if you run &lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;gunicorn&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; 127&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;1&lt;span class="p"&gt;:&lt;/span&gt;8000
+&lt;p&gt;That will grab and install your app's required dependencies like Flask.&lt;/p&gt;
+&lt;p&gt;Now, if you run&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;gunicorn&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; 127&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;1&lt;span class="p"&gt;:&lt;/span&gt;8000
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;you'll have your app running but if you try opening it from your browser you'll find that you can't actually see the "Hello World" message that we were expecting. That's where nginx comes in.&lt;/p&gt;
 &lt;h2&gt;Nginx&lt;/h2&gt;
 &lt;p&gt;First of all, you need to start nginx with&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;init&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;init&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Then &lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;enabled&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;
-&lt;span class="n"&gt;touch&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;available&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;
-&lt;span class="n"&gt;ln&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;available&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;  &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;enabled&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;
+&lt;p&gt;Then&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;enabled&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;
+    &lt;span class="n"&gt;touch&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;available&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;
+    &lt;span class="n"&gt;ln&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;available&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;  &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;enabled&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;To &lt;code&gt;/etc/nginx/sites-enabled/codebase&lt;/code&gt; add&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;server&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="n"&gt;location&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-        &lt;span class="n"&gt;proxy_pass&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;127&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;1&lt;span class="p"&gt;:&lt;/span&gt;8000&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;server&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;location&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                    &lt;span class="n"&gt;proxy_pass&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;127&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;1&lt;span class="p"&gt;:&lt;/span&gt;8000&lt;span class="p"&gt;;&lt;/span&gt;
+            &lt;span class="p"&gt;}&lt;/span&gt;
     &lt;span class="p"&gt;}&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;And restart nginx with &lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;init&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt; &lt;span class="n"&gt;restart&lt;/span&gt;
+&lt;p&gt;And restart nginx with&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;init&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt; &lt;span class="n"&gt;restart&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Now, from inside &lt;code&gt;codebase&lt;/code&gt; run&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;gunicorn&lt;/span&gt; &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;8000
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shell&lt;/span&gt;
+    &lt;span class="n"&gt;gunicorn&lt;/span&gt; &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;8000
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;If everything went right, if you visit &lt;a href="http://33.33.33.33/"&gt;http://33.33.33.33/&lt;/a&gt; you should now see the "Hello World!" message. Congratulations! You've successfully set up your own server.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Sun, 27 May 2012 00:00:00 +0545</pubDate><guid>tag:samrat.me,2012-05-27:blog/2012/05/flask-nginx-gunicornon-a-vagrant-box</guid><category>deployment</category><category>flask</category><category>nginx</category><category>gunicorn</category></item><item><title>How to convert a bookmarklet into a Chrome extension</title><link>http://samrat.me/blog/2012/05/how-to-convert-a-bookmarklet-into-a-chrome-extension</link><description>&lt;p&gt;I've been playing around with CoffeeScript lately and discovered a neat little tool that converts any JavaScript(and thus, Coffeescript) bookmarklet into a Chrome extension- &lt;a href="http://sandbox.self.li/bookmarklet-to-extension/"&gt;check it out&lt;/a&gt;.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Thu, 03 May 2012 18:16:00 +0545</pubDate><guid>tag:samrat.me,2012-05-03:blog/2012/05/how-to-convert-a-bookmarklet-into-a-chrome-extension</guid></item><item><title>Would you want to be on Svbtle?</title><link>http://samrat.me/blog/2012/05/would-you-want-to-be-on-svbtle</link><description>&lt;p&gt;When I first saw the Hacker News &lt;a href="http://news.ycombinator.com/item?id=3742314"&gt;post&lt;/a&gt; about &lt;a href="http://svbtle.com/"&gt;Svbtle&lt;/a&gt;, I opened it. Svbtle looked interesting, maybe something I'd want to use but then came the part about it being only for a small number of "vetted bloggers" and like so many others I was dissapointed. The design looked so good, it was a shame I couldn't use it. &lt;/p&gt;
+&lt;p&gt;If everything went right, if you visit &lt;a href="http://33.33.33.33/"&gt;http://33.33.33.33/&lt;/a&gt; you should now see the "Hello World!" message. Congratulations! You've successfully set up your own server.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update-&lt;/strong&gt; &lt;em&gt;I've written a follow-up to this post which covers Puppet, a really handy tool that's comes packaged with Vagrant- you can &lt;a href="http://samrat.github.com/blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box.html"&gt;find the post here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Sun, 27 May 2012 00:00:00 +0545</pubDate><guid>tag:samrat.me,2012-05-27:blog/2012/05/flask-nginx-gunicornon-a-vagrant-box</guid><category>deployment</category><category>flask</category><category>nginx</category><category>gunicorn</category></item><item><title>How to convert a bookmarklet into a Chrome extension</title><link>http://samrat.me/blog/2012/05/how-to-convert-a-bookmarklet-into-a-chrome-extension</link><description>&lt;p&gt;I've been playing around with CoffeeScript lately and discovered a neat little tool that converts any JavaScript(and thus, Coffeescript) bookmarklet into a Chrome extension- &lt;a href="http://sandbox.self.li/bookmarklet-to-extension/"&gt;check it out&lt;/a&gt;.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Thu, 03 May 2012 18:16:00 +0545</pubDate><guid>tag:samrat.me,2012-05-03:blog/2012/05/how-to-convert-a-bookmarklet-into-a-chrome-extension</guid></item><item><title>Would you want to be on Svbtle?</title><link>http://samrat.me/blog/2012/05/would-you-want-to-be-on-svbtle</link><description>&lt;p&gt;When I first saw the Hacker News &lt;a href="http://news.ycombinator.com/item?id=3742314"&gt;post&lt;/a&gt; about &lt;a href="http://svbtle.com/"&gt;Svbtle&lt;/a&gt;, I opened it. Svbtle looked interesting, maybe something I'd want to use but then came the part about it being only for a small number of "vetted bloggers" and like so many others I was dissapointed. The design looked so good, it was a shame I couldn't use it. &lt;/p&gt;
 &lt;p&gt;Soon, &lt;em&gt;the debate&lt;/em&gt; had already started. As I said, I wasn't the only one dissapointed that it was a closed system- everyone seemed to be complaining, but &lt;a href="http://news.ycombinator.com/item?id=3744237"&gt;someone else&lt;/a&gt; had gone a step ahead and built something similar called &lt;a href="http://natewienert.com/codename-obtvse"&gt;Obtvse&lt;/a&gt; and released its code. Svbtle became the &lt;strong&gt;hot story&lt;/strong&gt; on Hacker News; even TechCrunch ran a &lt;a href="http://techcrunch.com/2012/03/24/forget-todays-drama-dustin-curtis-svbtle-is-trying-to-push-blogging-forward/"&gt;piece on it&lt;/a&gt;. &lt;/p&gt;
 &lt;p&gt;So, how has things changed since I first read Dustin Curtis' post about Suvbtle? Well, now I don't really want to be on it. It's just gotten too much publicity and now the guys who are already in, the &lt;em&gt;vetted bloggers&lt;/em&gt; who were &lt;em&gt;witty and intelligent&lt;/em&gt; enough to get invited, kind of look like the bad guys. Regardless of how awesome the design is(yeah, I still the think the design is really neat), right now I think having the Svbtle brand name on my site is not something I'd want.&lt;/p&gt;
 &lt;p&gt;What do you guys think? Would you want to be on Svbtle?&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Thu, 03 May 2012 18:15:00 +0545</pubDate><guid>tag:samrat.me,2012-05-03:blog/2012/05/would-you-want-to-be-on-svbtle</guid><category>miscellaneous</category></item><item><title>The Internet- First Impressions</title><link>http://samrat.me/blog/2012/03/the-internet-first-impressions</link><description>&lt;p&gt;True, the Internet has changed the way we do business, the way we access information and the way we communicate. It is a revolutionary tool, which has probably already secured a place in the history books of the future. Lately, however, the way we use the Internet has changed too. My earliest memories of the Internet is how I used to throw questions at the butler from AskJeeves.com. For those unfamiliar with it, AskJeeves(which is now Ask.com). was a search engine similar to Google.&lt;/p&gt;
