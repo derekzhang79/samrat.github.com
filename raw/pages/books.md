@@ -3,6 +3,7 @@ slug: books
 
 Books I've read:
 
+- **The Curious Incident of the Dog in the Night-Time** by Mark Haddon
 - **The Book Thief** by Markus Zusak
 - **Into the Wild** by Jon Krakauer
 - **Flipped** by Wendelin Van Draanen

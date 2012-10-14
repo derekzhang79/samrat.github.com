@@ -61,9 +61,7 @@ a:visited:hover {
   color: black;
 }
 section {
-  font-family: Georgia, serif;
-  font-size: 18px;
-  line-height: 24px;
+  line-height: 26px;
   max-width: 768px;
 }
 #article-title {
@@ -75,6 +73,7 @@ div#entrymeta {
 }
 .entry-content p {
   font-size: 18px;
+  font-family: Georgia, serif;
 }
 .entry-content h2 {
   font-size: 24px;
@@ -177,11 +176,11 @@ table code {
 }
 /* All Mobile Sizes (devices and browser) */
 @media only screen and (max-width: 767px) {
-  
+  font-size: 16px;
 }
 /* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
 @media only screen and (min-width: 480px) and (max-width: 767px) {
-  
+  font-size: 15px;
 }
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
 @media only screen and (max-width: 479px) {
