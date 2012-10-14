@@ -111,7 +111,7 @@ This calls a remote function on the server which looks like this:
 
 Now recompile the Clojurescript code and refresh your browser, and you should be able to see the result of `adder` applied to the numbers we provided in a JS alert box. This is nothing special, as we could have defined `adder` in the Clojurescript code itself, but the same principle can be applied to use with functions that needs to be run on the server.
 
-Some resources that you might want to check out:
+Hope you found this post useful; you can shoot out any questions on Twitter @samratmansingh or email me. Some resources that you might want to check out:
 
 - [Chris Granger- Overtone and Clojurescript](http://www.chris-granger.com/2012/02/20/overtone-and-clojurescript/)
 - [My Clojure Adventure: Intro to ClojureScript - Getting Started](http://www.myclojureadventure.com/2012/09/intro-to-clojurescript-getting-started.html)
