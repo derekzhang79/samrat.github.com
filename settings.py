@@ -9,7 +9,7 @@ PAGE_URL = '{slug}'
 PAGE_SAVE_AS = '{slug}/index.html'
 
 #META
-META_DESCRIPTION = "Personal website and blog of Samrat Man Singh. Follow him at @samratmansing"
+META_DESCRIPTION = "Personal website and blog of Samrat Man Singh. Follow him at @samratmansingh"
 META_KEYWORDS = "Samrat Man Singh, python, flask, computers, technology, nepal"
 
 PLUGINS = [related_posts, 'pelican.plugins.sitemap']
@@ -45,7 +45,7 @@ SITENAME = 'Samrat Man Singh'
 FEED_DOMAIN = SITEURL
 FEED_RSS = 'feeds/all.xml'
 FEED_ATOM = 'feeds/atom.xml'
-FEED_URL = 'http://feeds.feedburner.com/SamratDotMe'
+TAG_FEED_RSS = 'feeds/%s.xml'
 
 
 TWITTER_USERNAME = 'samratmansingh'
@@ -57,7 +57,7 @@ SOCIAL = (('Projects', '/projects'),
           ('Github', 'http://github.com/samrat'),
           ('Contact', 'mailto:samrat@samrat.me'),)
 
-ARTICLE_FOOTER = "If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter</a> or <a href='http://samrat.github.com/feeds/all.xml'>subscribe to this blog</a>."
+ARTICLE_FOOTER = "If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter</a> or <a href='http://samrat.me/feeds/all.xml'>subscribe to this blog</a>."
 
 TIMEZONE = "Asia/Kathmandu"
 

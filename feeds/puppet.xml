@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Samrat Man Singh</title><link>http://samrat.me/</link><description></description><atom:link href="http://samrat.me/feeds/puppet.xml" rel="self"></atom:link><lastBuildDate>Mon, 04 Jun 2012 00:00:00 +0545</lastBuildDate><item><title>A first look at provisioning with Puppet(on a Vagrant box)</title><link>http://samrat.me/blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box</link><description>&lt;p&gt;In my &lt;a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/"&gt;previous post&lt;/a&gt;, I talked about deploying a Flask app on a Vagrant box using Gunicorn and Nginx. The response I got was mind-blowing, so I've decided to write about another neat tool that's awesome for deploying web apps- Puppet. &lt;a href="http://vagrantup.com"&gt;Vagrant&lt;/a&gt; actually encourages its users to use it, and you should use it. &lt;strong&gt;There's also an alternative to Puppet called &lt;a href="http://www.opscode.com/chef/"&gt;Chef&lt;/a&gt;; some people prefer that over Puppet, so you might want to check it out.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Hopefully I'll be able to demonstrate what Puppet does and why its awesome in this post. But please note that this isn't meant as a comprehensive tutorial, you should check out Puppet's &lt;a href="http://docs.puppetlabs.com/"&gt;docs&lt;/a&gt; for that. Also even though the Puppet docs asks you to get the Learning Puppet VM, I found it much more comfortable to use &lt;code&gt;vagrant ssh&lt;/code&gt; for learning Puppet, so if you already have Vagraant installed, you might want to try that out too- just try running &lt;code&gt;puppet&lt;/code&gt; inside the virtual machine. &lt;/p&gt;
+&lt;p&gt;What Puppet does is something called &lt;em&gt;provisioning&lt;/em&gt;- that means that it &lt;em&gt;&lt;a href="http://www.youtube.com/watch?v=bP8Mtiuc8XM"&gt;makes computers do what they are supposed to do&lt;/a&gt;&lt;/em&gt;. In other words, it does the configuring for you. To understand what that means, let's see it in action.&lt;/p&gt;
+&lt;p&gt;First create a Vagrant box, &lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="n"&gt;codebase_with_puppet&lt;/span&gt;
+&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="n"&gt;codebase_with_puppet&lt;/span&gt;
+
+&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You should now see Vagrantfile. Open it with a text editor, then uncomment the lines&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;provision&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;puppet&lt;/span&gt; &lt;span class="n"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;puppet&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+    &lt;span class="n"&gt;puppet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;manifests_path&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &amp;quot;&lt;span class="n"&gt;manifests&lt;/span&gt;&amp;quot;
+    &lt;span class="n"&gt;puppet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;manifest_file&lt;/span&gt;  &lt;span class="p"&gt;=&lt;/span&gt; &amp;quot;&lt;span class="n"&gt;base&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pp&lt;/span&gt;&amp;quot;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now, create &lt;code&gt;base.pp&lt;/code&gt; inside a folder called manifests, and add the following to it.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;package&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&amp;quot;&lt;span class="n"&gt;nginx&lt;/span&gt;&amp;quot;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;ensure&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;present&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now, run &lt;code&gt;vagrant up&lt;/code&gt;. You'll notice that Vagrant automatically installs &lt;code&gt;nginx&lt;/code&gt; after it boots the VM. You should get a message like &lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;notice&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Stage&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;Package&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ensure&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;ensure&lt;/span&gt; &lt;span class="n"&gt;changed&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;purged&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;present&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This can become a real treasure as this way, you won't have to memorize what you need to install, to get the app running. All the system needs is to have &lt;code&gt;puppet&lt;/code&gt; installed, after that &lt;code&gt;puppet&lt;/code&gt; with the right manifests will handle everything. &lt;/p&gt;
+&lt;p&gt;Now, let's do something different with Puppet- instead of installing another package, we'll use it to configure &lt;code&gt;nginx&lt;/code&gt;. &lt;/p&gt;
+&lt;p&gt;First, create a file in your local machine, inside &lt;code&gt;codebase_with_puppet&lt;/code&gt; called &lt;code&gt;codebase_nginx&lt;/code&gt;. To that file add the following&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="k"&gt;server&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kn"&gt;location&lt;/span&gt; &lt;span class="s"&gt;/&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kn"&gt;proxy_pass&lt;/span&gt; &lt;span class="s"&gt;http://127.0.0.1:8000&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If you've gone through the &lt;a href="http://samrat.github.com/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box/"&gt;previous post&lt;/a&gt; you'll notice that it's the same configuration that we had used. &lt;/p&gt;
+&lt;p&gt;Now, we'll use Puppet to make sure that the configuration file is placed where its supposed to be. To your &lt;code&gt;base.pp&lt;/code&gt; file, add &lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&amp;quot;&lt;span class="n"&gt;rm&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;&amp;quot;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;/etc/nginx/sites-enabled/default&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;ensure&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;absent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;require&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;nginx&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&amp;quot;&lt;span class="n"&gt;setup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;&amp;quot;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;/etc/nginx/sites-enabled/codebase_nginx&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;ensure&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;present&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;require&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;nginx&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+    &lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &amp;quot;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase_nginx&lt;/span&gt;&amp;quot;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Run &lt;code&gt;vagrant reload&lt;/code&gt; and you're done with the &lt;code&gt;nginx&lt;/code&gt; configuration. Besides removing the repetitiveness for you, Puppet is also wonderful when you're working on a team or on an open-source project. Now, all you need to do is write the manifests and once you share them you can rest assured that the entire team has the exact same environment.&lt;br /&gt;
+&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Mon, 04 Jun 2012 00:00:00 +0545</pubDate><guid>tag:samrat.me,2012-06-04:blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box</guid><category>deployment</category><category>puppet</category><category>vagrant</category></item></channel></rss>

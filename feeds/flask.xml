@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Samrat Man Singh</title><link>http://samrat.me/</link><description></description><atom:link href="http://samrat.me/feeds/flask.xml" rel="self"></atom:link><lastBuildDate>Sun, 27 May 2012 00:00:00 +0545</lastBuildDate><item><title>Flask + Nginx + Gunicorn(on a Vagrant box)</title><link>http://samrat.me/blog/2012/05/flask-nginx-gunicornon-a-vagrant-box</link><description>&lt;p&gt;I had some difficulty in grasping how exactly to set up a server when I tried to do so recently, so I decided to write a tutorial that will guide you through the process. Hopefully, this post will help you avoid at least some of the confusion that I encountered.&lt;/p&gt;
+&lt;p&gt;We'll be using Nginx + Gunicorn to host a simple Flask app. Many of you may not have access to a server but don't worry, we'll use &lt;a href="http://vagrantup.com"&gt;Vagrant&lt;/a&gt;, which makes use of a VirtualBox VM to emulate a server.&lt;/p&gt;
+&lt;h2&gt;The Flask App&lt;/h2&gt;
+&lt;p&gt;Because this is a post about deployment more than development, we'll make the web app super-simple. If you're not familiar with Flask, please &lt;a href="http://flask.pocoo.org/"&gt;check it out&lt;/a&gt;, its awesome and really easy to learn. You'll also probably want to develop the app inside &lt;a href="http://pypi.python.org/pypi/virtualenv"&gt;virtualenv&lt;/a&gt;- it makes things a lot neater. Make a folder in your local machine(we're not working with the virtual-machine yet) for your app, I'll call it &lt;code&gt;codebase&lt;/code&gt;. Create two folders called &lt;code&gt;static&lt;/code&gt; and &lt;code&gt;templates&lt;/code&gt;, and a Python file called &lt;code&gt;app.py&lt;/code&gt;. &lt;code&gt;codebase&lt;/code&gt; should now look like this:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+├── &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;
+├── &lt;span class="n"&gt;static&lt;/span&gt;
+└── &lt;span class="n"&gt;templates&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now, open &lt;code&gt;app.py&lt;/code&gt; with a text editor and add the following:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;flask&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;
+
+&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nd"&gt;@app.route&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;index&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Hello world!&amp;quot;&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;At this point, if you run &lt;code&gt;app.py&lt;/code&gt; with &lt;code&gt;python app.py&lt;/code&gt;, you should be able to open http://localhost:5000/ and see a "Hello World!" printed. Now, freeze your requirements with&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;freeze&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;requirements&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;txt&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Great, now we'll start working on the actual server.&lt;/p&gt;
+&lt;h2&gt;Vagrant&lt;/h2&gt;
+&lt;p&gt;As I said before, Vagrant allows you to work with server-like environments on your local machine. It's absolutely great. To get &lt;a href="http://vagrantup.com"&gt;Vagrant&lt;/a&gt; up and running:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="c"&gt;# first make sure Virtualbox is installed, then,&lt;/span&gt;
+&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;vagrant&lt;/span&gt;
+&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="nb"&gt;box&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;base&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;files&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vagrantup&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;precise32&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;box&lt;/span&gt;
+&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;
+&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;up&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If nothing went wrong, you should now see a file called &lt;code&gt;Vagrantfile&lt;/code&gt; inside &lt;code&gt;codebase&lt;/code&gt;- that's Vagrant's configuration file. Open the file, we'll need to make a few changes to the file.&lt;/p&gt;
+&lt;p&gt;First, uncomment the line:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;network&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;hostonly&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &amp;quot;192&lt;span class="p"&gt;.&lt;/span&gt;168&lt;span class="p"&gt;.&lt;/span&gt;33&lt;span class="p"&gt;.&lt;/span&gt;10&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and change "192.168.33.10" to "33.33.33.33". This will enable the host-machine(that is your computer) to access the webserver running on the VM.&lt;/p&gt;
+&lt;p&gt;That way we should be able to access a web app running in the VM's &lt;code&gt;localhost&lt;/code&gt;, on our machine.&lt;/p&gt;
+&lt;p&gt;Because, we did a &lt;code&gt;vagrant up&lt;/code&gt; the Vagrant box should already be running. Now, run&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;reload&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;so that the changes we made to the Vagrantfile take place.&lt;/p&gt;
+&lt;p&gt;After the VM restarts, run&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This allows you to run commands into the VM. Once inside the VM, we'll need to get some things installed. Run&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;nginx&lt;/span&gt;
+&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;virtualenv&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now let's create a folder inside the VM where we'll keep the application&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;
+&lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="n"&gt;www&lt;/span&gt;
+&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="n"&gt;www&lt;/span&gt;
+&lt;span class="n"&gt;virtualenv&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;no&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;packages&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="n"&gt;codebase&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And let's grab the application from our local machine&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;cp&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Note that while I used &lt;code&gt;cp&lt;/code&gt;, its always a better idea to use &lt;code&gt;git&lt;/code&gt; or some other version-control system. For more on that, I recommend that you read &lt;a href="http://thomas.pelletier.im/2011/04/git-django-deployment/"&gt;this post&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Then, activate the virtualenv we created.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;
+&lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;activate&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Install gunicorn with &lt;code&gt;pip&lt;/code&gt;&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;gunicorn&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Also install the other Python dependencies your app has with&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="n"&gt;requirements&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;txt&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;That will grab and install your app's required dependencies like Flask.&lt;/p&gt;
+&lt;p&gt;Now, if you run&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;gunicorn&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; 127&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;1&lt;span class="p"&gt;:&lt;/span&gt;8000
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;you'll have your app running but if you try opening it from your browser you'll find that you can't actually see the "Hello World" message that we were expecting. That's where nginx comes in.&lt;/p&gt;
+&lt;h2&gt;Nginx&lt;/h2&gt;
+&lt;p&gt;First of all, you need to start nginx with&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;init&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;enabled&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;
+&lt;span class="n"&gt;touch&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;available&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;
+&lt;span class="n"&gt;ln&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;available&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;  &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sites&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;enabled&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;codebase&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To &lt;code&gt;/etc/nginx/sites-enabled/codebase&lt;/code&gt; add&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;server&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;location&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="n"&gt;proxy_pass&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;127&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;0&lt;span class="p"&gt;.&lt;/span&gt;1&lt;span class="p"&gt;:&lt;/span&gt;8000&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And restart nginx with&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;init&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nginx&lt;/span&gt; &lt;span class="n"&gt;restart&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now, from inside &lt;code&gt;codebase&lt;/code&gt; run&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;gunicorn&lt;/span&gt; &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;8000
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If everything went right, if you visit &lt;a href="http://33.33.33.33/"&gt;http://33.33.33.33/&lt;/a&gt; you should now see the "Hello World!" message. Congratulations! You've successfully set up your own server.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update-&lt;/strong&gt; &lt;em&gt;I've written a follow-up to this post which covers Puppet, a really handy tool that's comes packaged with Vagrant- you can &lt;a href="http://samrat.github.com/blog/2012/06/a-first-look-at-provisioning-with-puppeton-a-vagrant-box.html"&gt;find the post here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Sun, 27 May 2012 00:00:00 +0545</pubDate><guid>tag:samrat.me,2012-05-27:blog/2012/05/flask-nginx-gunicornon-a-vagrant-box</guid><category>deployment</category><category>flask</category><category>nginx</category><category>gunicorn</category></item><item><title>Instamator is now open source</title><link>http://samrat.me/blog/2011/09/instamator-is-now-open-source</link><description>&lt;p&gt;&lt;a href="http://instamator.ep.io"&gt;Instamator&lt;/a&gt;, which I &lt;a href="http://samrat.github.com/blog/instamator.html"&gt;released just a few days ago&lt;/a&gt; is now open source. You can find the source code on &lt;a href="http://github.com/samrat/instamator"&gt;Github&lt;/a&gt;. Instamator is powered by &lt;a href="http://flask.pocoo.org"&gt;Flask&lt;/a&gt; and makes use of &lt;a href="http://redis.io"&gt;Redis&lt;/a&gt;. &lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Wed, 14 Sep 2011 18:15:00 +0545</pubDate><guid>tag:samrat.me,2011-09-14:blog/2011/09/instamator-is-now-open-source</guid><category>open source</category><category>instamator</category><category>instagram</category><category>flask</category></item><item><title>Instamator</title><link>http://samrat.me/blog/2011/09/instamator</link><description>&lt;p&gt;I have been wanting to create a serious web app for some time now, and I think I just did. Well, to be more accurate its a pretty simple web service. Let me introduce to you &lt;a href="http://instamator.ep.io"&gt;Instamator&lt;/a&gt;, it lets you easily grab and use the photos you've liked on Instagram, the popular photo-sharing app(for iOS devices only- but you can check &lt;a href="http://inkstagram.com/"&gt;Inkstagram&lt;/a&gt; for a web interface). &lt;/p&gt;
+&lt;p&gt;How does it do that? It produces feeds(JSON, RSS and text) about the photos you liked on Instagram which you can use to easily download all your Instagram "likes" or integrate on your website or blog. &lt;/p&gt;
+&lt;p&gt;Instamator was inpired by &lt;a href="http://flickmator.heroku.com"&gt;Flickmator&lt;/a&gt;, a similar web service built by &lt;a href="http://thomas.pelletier.im"&gt;Thomas Pelletier&lt;/a&gt;. It is powered by &lt;a href="http://flask.pocoo.org"&gt;Flask&lt;/a&gt;, &lt;a href="http://redis.io"&gt;Redis&lt;/a&gt; and hosted on &lt;a href="http://ep.io"&gt;ep.io&lt;/a&gt;.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Thu, 08 Sep 2011 18:15:00 +0545</pubDate><guid>tag:samrat.me,2011-09-08:blog/2011/09/instamator</guid><category>instagram</category><category>webapps</category><category>projects</category><category>flask</category></item></channel></rss>

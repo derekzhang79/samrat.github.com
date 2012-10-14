@@ -74,7 +74,8 @@ div#entrymeta {
   font-size: 12px;
 }
 .entry-content p {
-  font-size: 18px;
+  font-size: 17px;
+  line-height: 25px;
 }
 .entry-content h2 {
   font-size: 24px;
