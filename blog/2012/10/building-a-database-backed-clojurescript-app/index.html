@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+        <!-- Basic Page Needs
+  ================================================== -->
+        <meta charset="utf-8">
+        <title>Building a database-backed Clojurescript app | Samrat Man Singh</title>
+        <meta name="description" content="Personal weblog/site of
+                                          Samrat Man Singh">
+        <meta name="author" content="Samrat Man Singh">
+
+        <!--[if lt IE 9]>
+                <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Mobile Specific Metas
+  ================================================== -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+        <!-- CSS
+  ================================================== -->
+        <link rel="stylesheet" href="/theme/stylesheets/base.css">
+        <link rel="stylesheet" href="/theme/stylesheets/skeleton.css">
+        <link rel="stylesheet" href="/theme/stylesheets/layout.css">
+        <link rel="stylesheet" href="documentation-assets/docs.css">
+
+        <!-- Favicon
+        ================================================== -->
+        <link rel="shortcut icon" href="/favicon.ico">
+        <link rel="apple-touch-icon" sizes="57x57" href="src/images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="src/images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="src/images/apple-touch-icon-114x114.png">
+
+</head>
+  <body>
+    <div class="container">
+      <hr id="page-top"/>
+      <header>
+        <a href="http://samrat.me">
+          <h1 class="site-title">Samrat Man Singh</h1></a>
+        18-year old from Nepal interested in computers and technology.
+      </header>
+      <div id="nav">
+        <ul>
+          <li><a href="http://samrat.me">Home</a></li>
+          <li><a href="http://github.com/samrat">Github</a></li>
+          <li><a href="http://twitter.com/samratmansingh">Twitter</a></li>
+          <li><a href="mailto:samrat@samrat.me">Email</a></li>
+          <li><a href="http://samrat.me/feeds/all.xml">Feed</a>
+          </li>
+        </ul>
+      </div>
+      <hr class = "large"/>
+    </div>
+
+    <div class="container">
+
+        <section id="content">
+          
+<div class="sixteen columns">
+        <h3 class="entry-title"><a href="blog/2012/10/building-a-database-backed-clojurescript-app" title="Permalink to Building a database-backed Clojurescript app">Building a database-backed Clojurescript app</a></h3>
+
+        <div id="tweet"><a href="https://twitter.com/share" class="twitter-share-button" data-related="samratmansingh" data-count="none">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+        <div id="entrymeta">October 17, 2012</div>
+
+  <br/>
+        <div class="entry-content">
+          <p>In my <a href="http://samrat.me/blog/2012/10/getting-started-with-clojurescript">previous post</a>, I gave a pretty quick introduction to Clojurescript. If you haven't already, I recommend you read through that post. This post assumes that you have some Clojure knowledge and already have Leiningen running.</p>
+<p>In this post, I'll show how to create a SQL database-backed Clojurescript app(you were expecting NoSQL, weren't you?). For the lack of a better idea, I'm going to walk you through building a trivial app that helps keep track of books you've read.</p>
+<h3>The Setup</h3>
+<p>We'll use Noir as the back-end(with Hiccup generating the HTML); on the front-end besides using Clojurescript we'll also use a Clojurescript library called <a href="https://github.com/ibdknox/fetch">Fetch</a>, which makes client-server communication(as in AJAX) really easy and another one called <a href="https://github.com/ckirkendall/enfocus">enfocus</a> for DOM manipulation(mainly stuff like event-handling). For dealing with the database we'll use <a href="https://github.com/clojure/java.jdbc">clojure.java.jdbc</a>. To compile our Clojurescript we'll use a Leiningen plugin called <code>lein-cljsbuild</code>.</p>
+<p>So, first create a Noir project called <code>books</code>(I'm assuming you're using Leiningen 2):</p>
+<div class="codehilite"><pre><span class="n">lein</span> <span class="n">new</span> <span class="n">noir</span> <span class="n">books</span>
+</pre></div>
+
+
+<p>Now, let's add some dependencies and some Clojurescript-specific settings to our <code>project.clj</code>:</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="kd">defproject </span><span class="nv">books</span> <span class="s">&quot;0.1.0-SNAPSHOT&quot;</span>
+            <span class="ss">:description</span> <span class="s">&quot;Books- A database-backed Clojurescript app.&quot;</span>
+            <span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">org.clojure/clojure</span> <span class="s">&quot;1.4.0&quot;</span><span class="p">]</span>
+                           <span class="p">[</span><span class="nv">noir</span> <span class="s">&quot;1.3.0-beta3&quot;</span><span class="p">]</span>
+                           <span class="p">[</span><span class="nv">fetch</span> <span class="s">&quot;0.1.0-alpha2&quot;</span><span class="p">]</span>
+                           <span class="p">[</span><span class="nv">org.clojure/java.jdbc</span> <span class="s">&quot;0.2.3&quot;</span><span class="p">]]</span>
+            <span class="ss">:plugins</span> <span class="p">[[</span><span class="nv">lein-cljsbuild</span> <span class="s">&quot;0.2.8&quot;</span><span class="p">]]</span>
+            <span class="ss">:cljsbuild</span> <span class="p">{</span>
+                        <span class="ss">:builds</span> <span class="p">[{</span>
+                                  <span class="ss">:source-path</span> <span class="s">&quot;src/cljs&quot;</span>
+                                  <span class="ss">:compiler</span> <span class="p">{</span>
+                                             <span class="ss">:output-to</span> <span class="s">&quot;resources/public/js/main.js&quot;</span>
+                                             <span class="ss">:optimizations</span> <span class="ss">:whitespace</span>
+                                             <span class="ss">:pretty-print</span> <span class="nv">true</span><span class="p">}}]}</span>
+            <span class="ss">:main</span> <span class="nv">books.server</span><span class="p">)</span>
+</pre></div>
+
+
+<p>If you've gone through the first post, this should be pretty self-explanatory.</p>
+<h3>Adding a database</h3>
+<p>The first thing we're going to do is set up our database. For the sake of simplicity, in this post I'll use SQLite, however I think its safe to advise you guys not to use SQLite in production. Anyway, you'll also need to add <code>[org.xerial/sqlite-jdbc "3.7.2"]</code> to the list of dependencies.</p>
+<p>Pull in the newly added dependency using <code>lein deps</code>, then create a file in <code>src/books/models</code> called <code>db.clj</code>. To that file add:</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="kd">ns </span><span class="nv">books.models.db</span>
+  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.java.jdbc</span> <span class="ss">:as</span> <span class="nv">sql</span><span class="p">]))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">db</span>
+  <span class="p">{</span><span class="ss">:classname</span>   <span class="s">&quot;org.sqlite.JDBC&quot;</span>
+   <span class="ss">:subprotocol</span> <span class="s">&quot;sqlite&quot;</span>
+   <span class="ss">:subname</span>     <span class="s">&quot;db/database.db&quot;</span>
+  <span class="p">})</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">init-db</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">try</span>
+    <span class="p">(</span><span class="nf">sql/with-connection</span> <span class="nv">db</span>
+      <span class="p">(</span><span class="nf">sql/create-table</span>
+       <span class="ss">:books</span>
+       <span class="p">[</span><span class="ss">:title</span> <span class="s">&quot;varchar(250)&quot;</span><span class="p">]</span>
+       <span class="p">[</span><span class="ss">:review</span> <span class="s">&quot;varchar(500)&quot;</span><span class="p">]))</span>
+    <span class="p">(</span><span class="nf">catch</span> <span class="nv">Exception</span> <span class="nv">ex</span>
+      <span class="p">(</span><span class="nf">.getMessage</span> <span class="p">(</span><span class="nf">.getNextException</span> <span class="nv">ex</span><span class="p">)))))</span>
+</pre></div>
+
+
+<p>We've set the path of the SQLite database to <code>db/database.db</code>, so you'll need to create a folder called <code>db</code> at the root of the project. Now, to initialize the database, run <code>lein repl</code> then</p>
+<div class="codehilite"><pre><span class="nv">=&gt;</span> <span class="p">(</span><span class="nf">use</span> <span class="ss">&#39;books.models.db</span><span class="p">)</span>
+<span class="nv">=&gt;</span> <span class="p">(</span><span class="nf">init-db</span><span class="p">)</span>
+</pre></div>
+
+
+<p>If you don't get an error the database file should have been created. You can check if its present inside <code>db/</code>. The database will have a table called <code>:books</code> with just two fields- <code>:title</code> and <code>:review</code>.</p>
+<p>Now, we'll add some helper functions to <code>db.clj</code> to make our dealings with our database a lot simpler:</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="kd">defn </span><span class="nv">add-book</span>
+  <span class="p">[</span><span class="nv">book</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">sql/with-connection</span>
+    <span class="nv">db</span>
+    <span class="p">(</span><span class="nf">sql/insert-record</span> <span class="ss">:books</span> <span class="nv">book</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">db-read-all</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">sql/with-connection</span> <span class="nv">db</span>
+    <span class="p">(</span><span class="nf">sql/with-query-results</span> <span class="nv">result</span>
+      <span class="p">[</span><span class="s">&quot;SELECT * FROM books&quot;</span><span class="p">]</span>
+      <span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="nv">result</span><span class="p">))))</span>
+</pre></div>
+
+
+<p>The <code>add-book</code> function does exactly what you'd expect and the code should be pretty easy to understand. The argument to the function should be a Clojure hash-map, so a call to that function would look like:</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="nf">add-book</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;Clojure Programming&quot;</span> <span class="ss">:review</span> <span class="s">&quot;Great book. I really need to work on completing this one, though.&quot;</span><span class="p">})</span>
+</pre></div>
+
+
+<p>The <code>db-read-all</code> function pulls all entries from the <code>:books</code> table and returns a vector of the entries.</p>
+<h3>Views</h3>
+<p>Now, we'll work on our views. Open <code>src/books/views/welcome.clj</code> to edit it. This is what it should look like:</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="kd">ns </span><span class="nv">books.views.welcome</span>
+  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">books.views.common</span> <span class="ss">:as</span> <span class="nv">common</span><span class="p">])</span>
+  <span class="p">(</span><span class="ss">:use</span> <span class="p">[</span><span class="nv">noir.core</span> <span class="ss">:only</span> <span class="p">[</span><span class="nv">defpage</span><span class="p">]]</span>
+        <span class="nv">books.models.db</span>
+        <span class="nv">noir.fetch.remotes</span>
+        <span class="nv">hiccup.form</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">defpage</span> <span class="s">&quot;/&quot;</span> <span class="p">[]</span>
+         <span class="p">(</span><span class="nf">common/layout</span>
+          <span class="p">[</span><span class="ss">:h1</span> <span class="s">&quot;Books&quot;</span><span class="p">]</span>
+          <span class="p">[</span><span class="ss">:div</span>
+           <span class="p">(</span><span class="nf">label</span> <span class="p">{}</span> <span class="s">&quot;title&quot;</span> <span class="s">&quot;Title: &quot;</span><span class="p">)</span>
+           <span class="p">(</span><span class="nf">text-field</span> <span class="p">{</span><span class="ss">:class</span> <span class="s">&quot;title&quot;</span><span class="p">}</span> <span class="s">&quot;title&quot;</span><span class="p">)</span>
+           <span class="p">[</span><span class="ss">:br</span><span class="p">]</span>
+           <span class="p">(</span><span class="nf">label</span> <span class="p">{}</span> <span class="s">&quot;review&quot;</span> <span class="s">&quot;Review: &quot;</span><span class="p">)</span>
+           <span class="p">(</span><span class="nf">text-area</span>  <span class="p">{</span><span class="ss">:class</span> <span class="s">&quot;review&quot;</span><span class="p">}</span> <span class="s">&quot;review&quot;</span><span class="p">)</span>
+           <span class="p">[</span><span class="ss">:br</span><span class="p">]</span>
+           <span class="p">[</span><span class="ss">:button</span> <span class="p">{</span><span class="ss">:class</span> <span class="s">&quot;submit&quot;</span><span class="p">}</span> <span class="s">&quot;Submit&quot;</span><span class="p">]]))</span>
+
+<span class="p">(</span><span class="nf">defremote</span> <span class="nv">add-book-to-db</span> <span class="p">[</span><span class="nv">book</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">println </span><span class="nv">book</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">add-book</span> <span class="nv">book</span><span class="p">))</span>
+</pre></div>
+
+
+<p>The most important part of this is the <code>defremote</code> definition. Its defining a <code>fetch</code> remote, which simply calls the <code>add-book</code> function from the <code>books.models.db</code> namespace that we defined above. The little <code>println</code> call is simply there to help us see in a short while whether our program is working.</p>
+<h3>Client-side</h3>
+<p>Now, we finally get to writing some Clojurescript code. Create a new file inside <code>src/cljs/main.cljs</code> and into it type in the following:</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="kd">ns </span><span class="nv">books.cljs.main</span>
+  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">enfocus.core</span> <span class="ss">:as</span> <span class="nv">ef</span><span class="p">]</span>
+            <span class="p">[</span><span class="nv">fetch.remotes</span> <span class="ss">:as</span> <span class="nv">remotes</span><span class="p">])</span>
+  <span class="p">(</span><span class="ss">:require-macros</span> <span class="p">[</span><span class="nv">enfocus.macros</span> <span class="ss">:as</span> <span class="nv">em</span><span class="p">]</span>
+                   <span class="p">[</span><span class="nv">fetch.macros</span> <span class="ss">:as</span> <span class="nv">fm</span><span class="p">]))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">get-book-title</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">em/from</span> <span class="p">(</span><span class="nf">em/select</span> <span class="p">[</span><span class="s">&quot;#title&quot;</span><span class="p">])</span> <span class="p">(</span><span class="nf">em/get-prop</span> <span class="ss">:value</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">get-book-review</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">em/from</span> <span class="p">(</span><span class="nf">em/select</span> <span class="p">[</span><span class="s">&quot;#review&quot;</span><span class="p">])</span> <span class="p">(</span><span class="nf">em/get-prop</span> <span class="ss">:value</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">get-book-data</span> <span class="p">[]</span>
+  <span class="p">{</span><span class="ss">:title</span> <span class="p">(</span><span class="nf">get-book-title</span><span class="p">)</span>
+   <span class="ss">:review</span> <span class="p">(</span><span class="nf">get-book-review</span><span class="p">)})</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">push-book</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">fm/remote</span> <span class="p">(</span><span class="nf">add-book-to-db</span> <span class="p">(</span><span class="nf">get-book-data</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nf">em/defaction</span> <span class="nv">setup</span> <span class="p">[]</span>
+  <span class="p">[</span><span class="s">&quot;.submit&quot;</span><span class="p">]</span> <span class="p">(</span><span class="nf">em/listen</span> <span class="ss">:click</span> <span class="nv">push-book</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">set!</span> <span class="p">(</span><span class="nf">.-onload</span> <span class="nv">js/window</span><span class="p">)</span> <span class="nv">setup</span><span class="p">)</span>
+</pre></div>
+
+
+<p>In the namespace declaration you'll notice that we're bringing in stuff into our namespace from the Clojurescript libraries that we talked about in the beginning- Fetch and Enfocus. You've already seen how the server-side of our Fetch remote works, now you'll see how the other half of it, the client-side works.</p>
+<p>Starting from the top, the two functions <code>get-book-title</code> and <code>get-book-review</code> use enfocus to extract the value of the "title" and "review" fields in the browser. Read the enfocus docs to find out exactly how that works.</p>
+<p>The function <code>get-book-data</code> simply puts the title and review into a Clojure map and returns it. <code>push-book</code> then pushes this map to the remote function we defined in our <code>welcome.clj</code> file.</p>
+<p>The next block of code sets up a listener that calls the <code>push-book</code> function if the submit button is clicked. And the last line loads this listener when the web page loads.</p>
+<p>Compile the Javascript using <code>lein cljsbuild once</code> and make sure you've added the Javascript file to your template(in <code>common.clj</code>). If you visit the browser now, you should see the form as expected. Fill in the title and review and hit "Submit". And what happens? Nothing! Well, actually something does happen. If everything worked fine, the little <code>println</code> call in our remote function should have printed out some text in the process where you're running the Noir server. Also, if you try running the <code>db-read-all</code> function we defined, you should see that a book was in fact added when you hit "Submit".</p>
+<p>Congratulations! You've created a Clojurescript application backed by a database. I know its a really trivial app, stupid even but I do hope this post helped at least a few people get started with Clojurescript. And if you are interested in moving forward with this app, here are a few thoughts:</p>
+<ul>
+<li>Show a list of the books already added. Should be quite trivial to add using the <code>db-read-all</code> function.</li>
+<li>Search shouldn't be too difficult to add either. You'll probably want to add another helper function in <code>db.clj</code></li>
+<li>Make the text fields clear up when the user hits "Submit"- for this you'll want to read up on the <a href="https://github.com/ckirkendall/enfocus">enfocus</a> docs.</li>
+</ul>
+
+          <p id="footer-message">If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter</a> or <a href='http://samrat.me/feeds/all.xml'>subscribe to this blog</a>.</p>
+
+          
+          <div id="related-posts">
+            <h4>Related Posts</h4>
+            <ul>
+              
+              <li><a href="/blog/2012/10/getting-started-with-clojurescript">Getting started with Clojurescript</a></li>
+              
+              <li><a href="/blog/2012/08/extracting-feed-articles-in-clojure">Extracting feed articles in Clojure</a></li>
+              
+              <li><a href="/blog/2012/10/fighting-an-n-headed-monster-with-recursion">Fighting an N-headed monster with recursion</a></li>
+              
+            </ul>
+            <br/>
+          </div>
+          
+
+          <div><a href="http://samrat.me">← Back to Home</a></div>
+          <br/>
+          </div>
+        </div>
+
+        </section>
+   <hr />
+    </div>
+
+<!-- Google Analytics -->
+    
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-18986645-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+
+</body>

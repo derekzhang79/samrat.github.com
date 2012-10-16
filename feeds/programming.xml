@@ -1,5 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Samrat Man Singh</title><link>http://samrat.me/</link><description></description><atom:link href="http://samrat.me/feeds/programming.xml" rel="self"></atom:link><lastBuildDate>Sun, 14 Oct 2012 12:11:00 +0545</lastBuildDate><item><title>Getting started with Clojurescript</title><link>http://samrat.me/blog/2012/10/getting-started-with-clojurescript</link><description>&lt;p&gt;There doesn't seem to be much written about running Clojurescript, especially considering how great a tool it really is. I know there is &lt;a href="http://shop.oreilly.com/product/0636920025139.do"&gt;a book&lt;/a&gt; that's coming out soon, but I had some trouble getting started with Clojurescript so I decided to put together this post, that hopefully at least some of you will find useful. This post does assume that you have some knowledge of Clojure and that you've got Leiningen already running.&lt;/p&gt;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Samrat Man Singh</title><link>http://samrat.me/</link><description></description><atom:link href="http://samrat.me/feeds/programming.xml" rel="self"></atom:link><lastBuildDate>Wed, 17 Oct 2012 00:39:00 +0545</lastBuildDate><item><title>Building a database-backed Clojurescript app</title><link>http://samrat.me/blog/2012/10/building-a-database-backed-clojurescript-app</link><description>&lt;p&gt;In my &lt;a href="http://samrat.me/blog/2012/10/getting-started-with-clojurescript"&gt;previous post&lt;/a&gt;, I gave a pretty quick introduction to Clojurescript. If you haven't already, I recommend you read through that post. This post assumes that you have some Clojure knowledge and already have Leiningen running.&lt;/p&gt;
+&lt;p&gt;In this post, I'll show how to create a SQL database-backed Clojurescript app(you were expecting NoSQL, weren't you?). For the lack of a better idea, I'm going to walk you through building a trivial app that helps keep track of books you've read.&lt;/p&gt;
+&lt;h3&gt;The Setup&lt;/h3&gt;
+&lt;p&gt;We'll use Noir as the back-end(with Hiccup generating the HTML); on the front-end besides using Clojurescript we'll also use a Clojurescript library called &lt;a href="https://github.com/ibdknox/fetch"&gt;Fetch&lt;/a&gt;, which makes client-server communication(as in AJAX) really easy and another one called &lt;a href="https://github.com/ckirkendall/enfocus"&gt;enfocus&lt;/a&gt; for DOM manipulation(mainly stuff like event-handling). For dealing with the database we'll use &lt;a href="https://github.com/clojure/java.jdbc"&gt;clojure.java.jdbc&lt;/a&gt;. To compile our Clojurescript we'll use a Leiningen plugin called &lt;code&gt;lein-cljsbuild&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;So, first create a Noir project called &lt;code&gt;books&lt;/code&gt;(I'm assuming you're using Leiningen 2):&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;lein&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;noir&lt;/span&gt; &lt;span class="n"&gt;books&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now, let's add some dependencies and some Clojurescript-specific settings to our &lt;code&gt;project.clj&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;defproject &lt;/span&gt;&lt;span class="nv"&gt;books&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;0.1.0-SNAPSHOT&amp;quot;&lt;/span&gt;
+            &lt;span class="ss"&gt;:description&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Books- A database-backed Clojurescript app.&amp;quot;&lt;/span&gt;
+            &lt;span class="ss"&gt;:dependencies&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="nv"&gt;org.clojure/clojure&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1.4.0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+                           &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;noir&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1.3.0-beta3&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+                           &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;fetch&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;0.1.0-alpha2&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+                           &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;org.clojure/java.jdbc&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;0.2.3&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
+            &lt;span class="ss"&gt;:plugins&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="nv"&gt;lein-cljsbuild&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;0.2.8&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
+            &lt;span class="ss"&gt;:cljsbuild&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                        &lt;span class="ss"&gt;:builds&lt;/span&gt; &lt;span class="p"&gt;[{&lt;/span&gt;
+                                  &lt;span class="ss"&gt;:source-path&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;src/cljs&amp;quot;&lt;/span&gt;
+                                  &lt;span class="ss"&gt;:compiler&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                                             &lt;span class="ss"&gt;:output-to&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;resources/public/js/main.js&amp;quot;&lt;/span&gt;
+                                             &lt;span class="ss"&gt;:optimizations&lt;/span&gt; &lt;span class="ss"&gt;:whitespace&lt;/span&gt;
+                                             &lt;span class="ss"&gt;:pretty-print&lt;/span&gt; &lt;span class="nv"&gt;true&lt;/span&gt;&lt;span class="p"&gt;}}]}&lt;/span&gt;
+            &lt;span class="ss"&gt;:main&lt;/span&gt; &lt;span class="nv"&gt;books.server&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If you've gone through the first post, this should be pretty self-explanatory.&lt;/p&gt;
+&lt;h3&gt;Adding a database&lt;/h3&gt;
+&lt;p&gt;The first thing we're going to do is set up our database. For the sake of simplicity, in this post I'll use SQLite, however I think its safe to advise you guys not to use SQLite in production. Anyway, you'll also need to add &lt;code&gt;[org.xerial/sqlite-jdbc "3.7.2"]&lt;/code&gt; to the list of dependencies.&lt;/p&gt;
+&lt;p&gt;Pull in the newly added dependency using &lt;code&gt;lein deps&lt;/code&gt;, then create a file in &lt;code&gt;src/books/models&lt;/code&gt; called &lt;code&gt;db.clj&lt;/code&gt;. To that file add:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;ns &lt;/span&gt;&lt;span class="nv"&gt;books.models.db&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:require&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;clojure.java.jdbc&lt;/span&gt; &lt;span class="ss"&gt;:as&lt;/span&gt; &lt;span class="nv"&gt;sql&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nv"&gt;db&lt;/span&gt;
+  &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;:classname&lt;/span&gt;   &lt;span class="s"&gt;&amp;quot;org.sqlite.JDBC&amp;quot;&lt;/span&gt;
+   &lt;span class="ss"&gt;:subprotocol&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;sqlite&amp;quot;&lt;/span&gt;
+   &lt;span class="ss"&gt;:subname&lt;/span&gt;     &lt;span class="s"&gt;&amp;quot;db/database.db&amp;quot;&lt;/span&gt;
+  &lt;span class="p"&gt;})&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;defn &lt;/span&gt;&lt;span class="nv"&gt;init-db&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;try&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;sql/with-connection&lt;/span&gt; &lt;span class="nv"&gt;db&lt;/span&gt;
+      &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;sql/create-table&lt;/span&gt;
+       &lt;span class="ss"&gt;:books&lt;/span&gt;
+       &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:title&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;varchar(250)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+       &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:review&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;varchar(500)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;catch&lt;/span&gt; &lt;span class="nv"&gt;Exception&lt;/span&gt; &lt;span class="nv"&gt;ex&lt;/span&gt;
+      &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;.getMessage&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;.getNextException&lt;/span&gt; &lt;span class="nv"&gt;ex&lt;/span&gt;&lt;span class="p"&gt;)))))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We've set the path of the SQLite database to &lt;code&gt;db/database.db&lt;/code&gt;, so you'll need to create a folder called &lt;code&gt;db&lt;/code&gt; at the root of the project. Now, to initialize the database, run &lt;code&gt;lein repl&lt;/code&gt; then&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;use&lt;/span&gt; &lt;span class="ss"&gt;&amp;#39;books.models.db&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nv"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;init-db&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If you don't get an error the database file should have been created. You can check if its present inside &lt;code&gt;db/&lt;/code&gt;. The database will have a table called &lt;code&gt;:books&lt;/code&gt; with just two fields- &lt;code&gt;:title&lt;/code&gt; and &lt;code&gt;:review&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now, we'll add some helper functions to &lt;code&gt;db.clj&lt;/code&gt; to make our dealings with our database a lot simpler:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;defn &lt;/span&gt;&lt;span class="nv"&gt;add-book&lt;/span&gt;
+  &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;book&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;sql/with-connection&lt;/span&gt;
+    &lt;span class="nv"&gt;db&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;sql/insert-record&lt;/span&gt; &lt;span class="ss"&gt;:books&lt;/span&gt; &lt;span class="nv"&gt;book&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;defn &lt;/span&gt;&lt;span class="nv"&gt;db-read-all&lt;/span&gt;
+  &lt;span class="p"&gt;[]&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;sql/with-connection&lt;/span&gt; &lt;span class="nv"&gt;db&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;sql/with-query-results&lt;/span&gt; &lt;span class="nv"&gt;result&lt;/span&gt;
+      &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SELECT * FROM books&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+      &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;into &lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="nv"&gt;result&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The &lt;code&gt;add-book&lt;/code&gt; function does exactly what you'd expect and the code should be pretty easy to understand. The argument to the function should be a Clojure hash-map, so a call to that function would look like:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;add-book&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;:title&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Clojure Programming&amp;quot;&lt;/span&gt; &lt;span class="ss"&gt;:review&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Great book. I really need to work on completing this one, though.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;})&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The &lt;code&gt;db-read-all&lt;/code&gt; function pulls all entries from the &lt;code&gt;:books&lt;/code&gt; table and returns a vector of the entries.&lt;/p&gt;
+&lt;h3&gt;Views&lt;/h3&gt;
+&lt;p&gt;Now, we'll work on our views. Open &lt;code&gt;src/books/views/welcome.clj&lt;/code&gt; to edit it. This is what it should look like:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;ns &lt;/span&gt;&lt;span class="nv"&gt;books.views.welcome&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:require&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;books.views.common&lt;/span&gt; &lt;span class="ss"&gt;:as&lt;/span&gt; &lt;span class="nv"&gt;common&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:use&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;noir.core&lt;/span&gt; &lt;span class="ss"&gt;:only&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;defpage&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
+        &lt;span class="nv"&gt;books.models.db&lt;/span&gt;
+        &lt;span class="nv"&gt;noir.fetch.remotes&lt;/span&gt;
+        &lt;span class="nv"&gt;hiccup.form&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;defpage&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+         &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;common/layout&lt;/span&gt;
+          &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:h1&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Books&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+          &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:div&lt;/span&gt;
+           &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;label&lt;/span&gt; &lt;span class="p"&gt;{}&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Title: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+           &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;text-field&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;:class&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+           &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:br&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+           &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;label&lt;/span&gt; &lt;span class="p"&gt;{}&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;review&amp;quot;&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Review: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+           &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;text-area&lt;/span&gt;  &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;:class&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;review&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;review&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+           &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:br&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+           &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:button&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;:class&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;submit&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Submit&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]]))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;defremote&lt;/span&gt; &lt;span class="nv"&gt;add-book-to-db&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;book&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;println &lt;/span&gt;&lt;span class="nv"&gt;book&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;add-book&lt;/span&gt; &lt;span class="nv"&gt;book&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The most important part of this is the &lt;code&gt;defremote&lt;/code&gt; definition. Its defining a &lt;code&gt;fetch&lt;/code&gt; remote, which simply calls the &lt;code&gt;add-book&lt;/code&gt; function from the &lt;code&gt;books.models.db&lt;/code&gt; namespace that we defined above. The little &lt;code&gt;println&lt;/code&gt; call is simply there to help us see in a short while whether our program is working.&lt;/p&gt;
+&lt;h3&gt;Client-side&lt;/h3&gt;
+&lt;p&gt;Now, we finally get to writing some Clojurescript code. Create a new file inside &lt;code&gt;src/cljs/main.cljs&lt;/code&gt; and into it type in the following:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;ns &lt;/span&gt;&lt;span class="nv"&gt;books.cljs.main&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:require&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;enfocus.core&lt;/span&gt; &lt;span class="ss"&gt;:as&lt;/span&gt; &lt;span class="nv"&gt;ef&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+            &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;fetch.remotes&lt;/span&gt; &lt;span class="ss"&gt;:as&lt;/span&gt; &lt;span class="nv"&gt;remotes&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:require-macros&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;enfocus.macros&lt;/span&gt; &lt;span class="ss"&gt;:as&lt;/span&gt; &lt;span class="nv"&gt;em&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+                   &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;fetch.macros&lt;/span&gt; &lt;span class="ss"&gt;:as&lt;/span&gt; &lt;span class="nv"&gt;fm&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;defn &lt;/span&gt;&lt;span class="nv"&gt;get-book-title&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;em/from&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;em/select&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;#title&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;em/get-prop&lt;/span&gt; &lt;span class="ss"&gt;:value&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;defn &lt;/span&gt;&lt;span class="nv"&gt;get-book-review&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;em/from&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;em/select&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;#review&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;em/get-prop&lt;/span&gt; &lt;span class="ss"&gt;:value&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;defn &lt;/span&gt;&lt;span class="nv"&gt;get-book-data&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+  &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;:title&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;get-book-title&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+   &lt;span class="ss"&gt;:review&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;get-book-review&lt;/span&gt;&lt;span class="p"&gt;)})&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;defn &lt;/span&gt;&lt;span class="nv"&gt;push-book&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;fm/remote&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;add-book-to-db&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;get-book-data&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;em/defaction&lt;/span&gt; &lt;span class="nv"&gt;setup&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+  &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;.submit&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;em/listen&lt;/span&gt; &lt;span class="ss"&gt;:click&lt;/span&gt; &lt;span class="nv"&gt;push-book&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;set!&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;.-onload&lt;/span&gt; &lt;span class="nv"&gt;js/window&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="nv"&gt;setup&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In the namespace declaration you'll notice that we're bringing in stuff into our namespace from the Clojurescript libraries that we talked about in the beginning- Fetch and Enfocus. You've already seen how the server-side of our Fetch remote works, now you'll see how the other half of it, the client-side works.&lt;/p&gt;
+&lt;p&gt;Starting from the top, the two functions &lt;code&gt;get-book-title&lt;/code&gt; and &lt;code&gt;get-book-review&lt;/code&gt; use enfocus to extract the value of the "title" and "review" fields in the browser. Read the enfocus docs to find out exactly how that works.&lt;/p&gt;
+&lt;p&gt;The function &lt;code&gt;get-book-data&lt;/code&gt; simply puts the title and review into a Clojure map and returns it. &lt;code&gt;push-book&lt;/code&gt; then pushes this map to the remote function we defined in our &lt;code&gt;welcome.clj&lt;/code&gt; file.&lt;/p&gt;
+&lt;p&gt;The next block of code sets up a listener that calls the &lt;code&gt;push-book&lt;/code&gt; function if the submit button is clicked. And the last line loads this listener when the web page loads.&lt;/p&gt;
+&lt;p&gt;Compile the Javascript using &lt;code&gt;lein cljsbuild once&lt;/code&gt; and make sure you've added the Javascript file to your template(in &lt;code&gt;common.clj&lt;/code&gt;). If you visit the browser now, you should see the form as expected. Fill in the title and review and hit "Submit". And what happens? Nothing! Well, actually something does happen. If everything worked fine, the little &lt;code&gt;println&lt;/code&gt; call in our remote function should have printed out some text in the process where you're running the Noir server. Also, if you try running the &lt;code&gt;db-read-all&lt;/code&gt; function we defined, you should see that a book was in fact added when you hit "Submit".&lt;/p&gt;
+&lt;p&gt;Congratulations! You've created a Clojurescript application backed by a database. I know its a really trivial app, stupid even but I do hope this post helped at least a few people get started with Clojurescript. And if you are interested in moving forward with this app, here are a few thoughts:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Show a list of the books already added. Should be quite trivial to add using the &lt;code&gt;db-read-all&lt;/code&gt; function.&lt;/li&gt;
+&lt;li&gt;Search shouldn't be too difficult to add either. You'll probably want to add another helper function in &lt;code&gt;db.clj&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Make the text fields clear up when the user hits "Submit"- for this you'll want to read up on the &lt;a href="https://github.com/ckirkendall/enfocus"&gt;enfocus&lt;/a&gt; docs.&lt;/li&gt;
+&lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Samrat Man Singh</dc:creator><pubDate>Wed, 17 Oct 2012 00:39:00 +0545</pubDate><guid>tag:samrat.me,2012-10-17:blog/2012/10/building-a-database-backed-clojurescript-app</guid><category>clojure</category><category>clojurescript</category><category>programming</category></item><item><title>Getting started with Clojurescript</title><link>http://samrat.me/blog/2012/10/getting-started-with-clojurescript</link><description>&lt;p&gt;There doesn't seem to be much written about running Clojurescript, especially considering how great a tool it really is. I know there is &lt;a href="http://shop.oreilly.com/product/0636920025139.do"&gt;a book&lt;/a&gt; that's coming out soon, but I had some trouble getting started with Clojurescript so I decided to put together this post, that hopefully at least some of you will find useful. This post does assume that you have some knowledge of Clojure and that you've got Leiningen already running.&lt;/p&gt;
 &lt;p&gt;To those not familiar with Clojurescript, its a Clojure compiler that targets Javascript. This simply means that it turns Clojure code into Javascript. It's like &lt;a href="http://coffeescript.org"&gt;Coffeescript&lt;/a&gt;. To find out why you might want to use Clojurescript(and Clojure) check out this &lt;a href="https://oracleus.activeevents.com/connect/sessionDetail.ww?SESSION_ID=3242"&gt;talk&lt;/a&gt;.&lt;/p&gt;
 &lt;h3&gt;Getting started&lt;/h3&gt;
 &lt;p&gt;As I said, you need to have Leiningen installed. For this post, I'll use Noir as the backend for a really simple app that doesn't do much. However, I'll show how you can have the app's client and server side communicate with each other, which'll make use of Noir. So, we'll just start off with a Noir project:&lt;/p&gt;
