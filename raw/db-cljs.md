@@ -4,7 +4,7 @@ tags: clojure, clojurescript, programming
 
 In my [previous post][getting_started], I gave a pretty quick introduction to Clojurescript. If you haven't already, I recommend you read through that post. This post assumes that you have some Clojure knowledge and already have Leiningen running.
 
-In this post, I'll show how to create a SQL database-backed Clojurescript app(you were expecting NoSQL, weren't you?). For the lack of a better idea, I'm going to walk you through building a trivial app that helps keep track of books you've read.
+In this post, I'll show how to create a SQL database-backed Clojurescript app(you were expecting NoSQL, weren't you?). For the lack of a better idea, I'm going to walk you through building a trivial app that helps keep track of books you've read. You can view the source code for the app [on Github][repo].
 
 ### The Setup
 
@@ -172,3 +172,4 @@ Congratulations! You've created a Clojurescript application backed by a database
 [fetch]: https://github.com/ibdknox/fetch
 [enfocus]: https://github.com/ckirkendall/enfocus
 [jdbc]: https://github.com/clojure/java.jdbc
+[repo]: https://github.com/samrat/books-cljs-tutorial

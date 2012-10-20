@@ -70,7 +70,7 @@
   <br/>
         <div class="entry-content">
           <p>In my <a href="http://samrat.me/blog/2012/10/getting-started-with-clojurescript">previous post</a>, I gave a pretty quick introduction to Clojurescript. If you haven't already, I recommend you read through that post. This post assumes that you have some Clojure knowledge and already have Leiningen running.</p>
-<p>In this post, I'll show how to create a SQL database-backed Clojurescript app(you were expecting NoSQL, weren't you?). For the lack of a better idea, I'm going to walk you through building a trivial app that helps keep track of books you've read.</p>
+<p>In this post, I'll show how to create a SQL database-backed Clojurescript app(you were expecting NoSQL, weren't you?). For the lack of a better idea, I'm going to walk you through building a trivial app that helps keep track of books you've read. You can view the source code for the app <a href="https://github.com/samrat/books-cljs-tutorial">on Github</a>.</p>
 <h3>The Setup</h3>
 <p>We'll use Noir as the back-end(with Hiccup generating the HTML); on the front-end besides using Clojurescript we'll also use a Clojurescript library called <a href="https://github.com/ibdknox/fetch">Fetch</a>, which makes client-server communication(as in AJAX) really easy and another one called <a href="https://github.com/ckirkendall/enfocus">enfocus</a> for DOM manipulation(mainly stuff like event-handling). For dealing with the database we'll use <a href="https://github.com/clojure/java.jdbc">clojure.java.jdbc</a>. To compile our Clojurescript we'll use a Leiningen plugin called <code>lein-cljsbuild</code>.</p>
 <p>So, first create a Noir project called <code>books</code>(I'm assuming you're using Leiningen 2):</p>
