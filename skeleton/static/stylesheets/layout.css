@@ -19,6 +19,9 @@
         #Font-Face */
 /* #Site Styles
 ================================================== */
+body {
+  background-color: #EEE;
+}
 header {
   text-align: center;
   border-top-style: solid;
@@ -74,8 +77,8 @@ div#entrymeta {
   font-size: 12px;
 }
 .entry-content p {
-  font-size: 17px;
-  line-height: 25px;
+  font-size: 18px;
+  line-height: 28px;
 }
 .entry-content h2 {
   font-size: 24px;
