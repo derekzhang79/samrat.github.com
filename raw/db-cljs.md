@@ -162,7 +162,7 @@ The next block of code sets up a listener that calls the `push-book` function if
 
 Compile the Javascript using `lein cljsbuild once` and make sure you've added the Javascript file to your template(in `common.clj`). If you visit the browser now, you should see the form as expected. Fill in the title and review and hit "Submit". And what happens? Nothing! Well, actually something does happen. If everything worked fine, the little `println` call in our remote function should have printed out some text in the process where you're running the Noir server. Also, if you try running the `db-read-all` function we defined, you should see that a book was in fact added when you hit "Submit".
 
-Congratulations! You've created a Clojurescript application backed by a database. I know its a really trivial app, stupid even but I do hope this post helped at least a few people get started with Clojurescript. And if you are interested in moving forward with this app, here are a few thoughts:
+Congratulations! You've created a Clojurescript application backed by a database. I know its a really trivial app, silly even but I do hope this post helped at least a few people get started with Clojurescript. And if you are interested in moving forward with this app, here are a few thoughts:
 
 - Show a list of the books already added. Should be quite trivial to add using the `db-read-all` function.
 - Search shouldn't be too difficult to add either. You'll probably want to add another helper function in `db.clj`
