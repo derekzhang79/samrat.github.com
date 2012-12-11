@@ -73,7 +73,9 @@
 
           <p id="footer-message">If you liked this post, you should <a href='http://twitter.com/samratmansingh'>follow me on Twitter</a> or <a href='http://samrat.me/feeds/all.xml'>subscribe to this blog</a>.</p>
 
-                  <div id="disqus_thread"></div>
+          <a id="displayText" href= "blog/2011/09/instamator-is-now-open-source#disqus_thread"
+          onclick="javascript:toggle();" style="text-align:center;">Leave a Comment</a>
+          <div id="toggleDiv" style="display: none">        <div id="disqus_thread"></div>
         <script type="text/javascript">
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'samratmansingh'; // required: replace example with your forum shortname
@@ -87,7 +89,7 @@
         </script>
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-        
+        </div>
 
           <!--  -->
           <!-- <div id="related-posts"> -->
@@ -107,6 +109,36 @@
           <br/>
           </div>
         </div>
+
+<script language="javascript"> 
+function toggle() {
+    var ele = document.getElementById("toggleDiv");
+    var text = document.getElementById("displayText");
+    if(ele.style.display == "block") {
+            ele.style.display = "none";
+        text.innerHTML = "show";
+    }
+    else {
+        ele.style.display = "block";
+        text.innerHTML = "";
+    }
+} 
+</script>
+
+<!-- Disqus -->
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'samratmansingh'; // required: replace example with your forum shortname
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function () {
+  var s = document.createElement('script'); s.async = true;
+  s.type = 'text/javascript';
+  s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+        
 
         </section>
    <hr />
