@@ -13,9 +13,13 @@
 
           <p id="footer-message">{{ ARTICLE_FOOTER }}</p>
 
-          <a id="displayText" href= "#disqus_thread"
-          onclick="javascript:toggle();" style="text-align:center;">Leave a Comment</a>
-          <div id="toggleDiv" style="display: none">{% include "disqus.html" %}</div>
+          <hr/>
+          <div style="text-align:center;">
+            <a id="displayText" href= "#disqus_thread"
+          onclick="javascript:toggle();">Comments</a>
+          <div id="toggleDiv" style="display: none">{% include
+          "disqus.html" %}</div>
+          </div>
 
           <!-- {% if article.related_posts %} -->
           <!-- <div id="related-posts"> -->
