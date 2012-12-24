@@ -3,6 +3,7 @@ slug: books
 
 Books I've read:
 
+- **SuperFreakonomics** by Steven Lewitt and Stephen Dubner
 - **The Subtle Knife** by Philip Pulman
 - **The Golden Compass** by Philip Pulman
 - **The Curious Incident of the Dog in the Night-Time** by Mark Haddon
