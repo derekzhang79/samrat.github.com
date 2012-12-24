@@ -18,7 +18,7 @@
           <div id="related-posts">
             <h4>Related Posts</h4>
             <ul>
-              {% for post in article.related_posts %}
+              {% for post in article.related_posts[:3] %}
               <li><a href="/{{ post.url }}">{{ post.title }}</a></li>
               {% endfor %}
             </ul>
